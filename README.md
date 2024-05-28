@@ -3,13 +3,16 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 
 [Chenyu Fang](https://cnyvfang.github.io/), [Chunming He](https://chunminghe.github.io/), Fengyang Xiao, [Yulun Zhang](https://yulunzhang.com), Longxiang Tang, Yuelin Zhang, [Kai Li](https://kailigo.github.io), and Xiu Li
 
+![](figs/corun.png)
+
+
 ## 🔥 News
 
 - **2024-05-28:** We release this repository, the preprint of full paper will be release soon.
 
 
 
-## 🔧 Todo
+## 🔧 Todo 
 - [ ] Complete this repository
 - [ ] Release the preprint
 
