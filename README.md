@@ -6,21 +6,22 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 **Abstract:** Real-world Image Dehazing (RID) aims to alleviate haze-induced degradation in real-world settings. This task remains challenging due to the complexities in accurately modeling real haze distributions and the scarcity of paired real-world data. To address these challenges, we first introduce a cooperative unfolding network that jointly models atmospheric scattering and image scenes, effectively integrating physical knowledge into deep networks to restore haze-contaminated details. Additionally, we propose the first RID-oriented iterative mean-teacher framework, termed the Coherence-based Label Generator, to generate high-quality pseudo labels for network training. Specifically, we provide an optimal label pool to store the best pseudo-labels during network training, leveraging both global and local coherence to select high-quality candidates and assign weights to prioritize haze-free regions. We verify the effectiveness of our method, with experiments demonstrating that it achieves state-of-the-art performance on RID tasks.  
 
 <center>
+<div style="color:orange;
+    display: inline-block;
+    color: #999;">The architecture of the proposed CORUN with the detailed at k-th stage.</div>
     <img
     src="figs/Arch.jpg">
     <br>
-    <div style="color:orange;
-    display: inline-block;
-    color: #999;">The architecture of the proposed CORUN with the detailed at k-th stage.</div>
 </center>
 
 <center>
-    <img style="padding-top: 10px;"
-    src="figs/CPL.jpg">
-    <br>
-    <div style="color:orange;
+<div style="color:orange;
+    padding-top: 10px;
     display: inline-block;
     color: #999;">The plug-and-play Coherence-based Pseudo Labeling paradigm.</div>
+    <img
+    src="figs/CPL.jpg">
+    <br>
 </center>
 
 
