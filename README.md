@@ -51,7 +51,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and corresponding downstream tasks. More results can be found in the paper.
 
 <details>
-<summary>Quantitative Comparison (click to expan)</summary>
+<summary>Quantitative Comparison (click to expand)</summary>
 
 - Quantitative results on RTTS
   <p align="center">
@@ -68,7 +68,7 @@ We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and c
   </details>
 
 <details> 
-<summary>Visual Comparison (click to expan)</summary>
+<summary>Visual Comparison (click to expand)</summary>
 
 - Results of cutting-edge methods based on deep unfolding networks.
   <p align="center">
