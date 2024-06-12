@@ -7,7 +7,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 
 
 <details>
-<summary>🏃 The architecture of the proposed CORUN with the detailed at k-th stage</summary>
+<summary>🏃 The architecture of the proposed CORUN with the detailed at k-th stage (CORUN)</summary>
 <center>
     <img
     src="figs/Arch.jpg">
@@ -15,7 +15,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 </details>
 
 <details>
-<summary>🏃🏻‍♂️ The plug-and-play Coherence-based Pseudo Labeling paradigm</summary>
+<summary>🏃🏻‍♂️ The plug-and-play Coherence-based Pseudo Labeling paradigm (Colabator)</summary>
 <center>
     <img
     src="figs/CPL.jpg">
