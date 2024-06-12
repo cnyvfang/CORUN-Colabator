@@ -7,7 +7,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 
 
 <details>
-<summary>🏃 The architecture of the proposed CORUN with the detailed at k-th stage (CORUN)</summary>
+<summary>🏃 The architecture of the proposed CORUN with the details at k-th stage (CORUN)</summary>
 <center>
     <img
     src="figs/Arch.jpg">
