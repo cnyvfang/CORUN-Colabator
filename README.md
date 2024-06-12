@@ -8,7 +8,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 <center>
 <div style="color:orange;
     display: inline-block;
-    color: #999;">The architecture of the proposed CORUN with the detailed at k-th stage.</div>
+    color: #999;">🏃 The architecture of the proposed CORUN with the detailed at k-th stage.</div>
     <img
     src="figs/Arch.jpg">
     <br>
@@ -18,7 +18,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 <div style="color:orange;
     padding-top: 10px;
     display: inline-block;
-    color: #999;">The plug-and-play Coherence-based Pseudo Labeling paradigm.</div>
+    color: #999;">🏃🏻‍♂️ The plug-and-play Coherence-based Pseudo Labeling paradigm.</div>
     <img
     src="figs/CPL.jpg">
     <br>
