@@ -26,6 +26,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 
 
 ## 🔥 News
+- **2024-06-13:** We release the preprint and the citation.
 - **2024-06-12:** We release the results and acknowledgements of this work.
 - **2024-05-28:** We release this repository, the preprint of full paper will be release soon.
 
@@ -33,7 +34,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 
 ## 🔧 Todo 
 - [ ] Complete this repository
-- [ ] Release the preprint
+- [x] Release the preprint
 
 
 ## 🔗 Contents
@@ -42,7 +43,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 - [ ] Training
 - [ ] Testing
 - [x] [Results](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-results)
-- [ ] Citation
+- [x] [Citation](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-citation)
 - [x] [Acknowledgements](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-acknowledgements)
 
 
@@ -95,7 +96,14 @@ We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and c
 If you find the code helpful in your resarch or work, please cite the following paper(s).
 
 ```
-The bib of this paper will be released soon.
+@misc{fang2024realworld,
+      title={Real-world Image Dehazing with Coherence-based Label Generator and Cooperative Unfolding Network}, 
+      author={Chengyu Fang and Chunming He and Fengyang Xiao and Yulun Zhang and Longxiang Tang and Yuelin Zhang and Kai Li and Xiu Li},
+      year={2024},
+      eprint={2406.07966},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 ```
 
 
