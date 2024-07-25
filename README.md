@@ -26,6 +26,7 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 
 
 ## 🔥 News
+- **2024-07-26:** We have organized and refined the code for the Colabator framework into a separate repository to facilitate more efficient application across different networks and tasks. The repository of Colabator Template will be made public together with the code of this repository once the paper is accepted. 😚
 - **2024-06-13:** We release the preprint and the citation.
 - **2024-06-12:** We release the results and acknowledgements of this work.
 - **2024-05-28:** We release this repository, the preprint of full paper will be release soon.
