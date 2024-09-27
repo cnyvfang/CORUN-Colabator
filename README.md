@@ -45,20 +45,10 @@ We will finalize all the code before the conference and upload the corresponding
 
 ## 🔧 Todo 
 - [ ] Complete this repository
+- [ ] Release the pretrained weights and test results
+- [ ] Release the train test script with options
+- [x] Relsase the codebase
 - [x] Release the preprint
-
-
-## 🔗 Contents
-- [ ] Result Files
-- [ ] Datasets
-- [ ] Pretrained Weights
-- [ ] Options
-- [ ] Train/Test Scrips
-- [x] Training Code
-- [x] Testing Code
-- [x] [Results](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-results)
-- [x] [Citation](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-citation)
-- [x] [Acknowledgements](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-acknowledgements)
 
 ## ⚙️ Dependencies and Installation
 ### Init Conda Environment and Clone Repo
