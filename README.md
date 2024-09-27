@@ -1,5 +1,5 @@
 # <p align=center> `CORUN 🏃 | Colabator 🏃🏻‍♂️` </p>
-<p align=center> <b>NIPS2024 Spotlight ✨</p>
+<b><p align=center> NIPS2024 Spotlight ✨</p></b>
 
 
 <a href='https://arxiv.org/pdf/2406.07966'><img src='https://img.shields.io/badge/ArXiv-2406.07966-red'></a>
