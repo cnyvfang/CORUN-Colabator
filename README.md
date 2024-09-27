@@ -3,6 +3,12 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 
 [Chengyu Fang](https://cnyvfang.github.io/), [Chunming He](https://chunminghe.github.io/), Fengyang Xiao, [Yulun Zhang](https://yulunzhang.com), Longxiang Tang, Yuelin Zhang, [Kai Li](https://kailigo.github.io), and Xiu Li
 
+```
+The code is currently being cleaned and organized.
+There might be issues with the code in the repository at this moment. 
+We will finalize all the code before the conference and upload the corresponding scripts and pre-trained weights.
+```
+
 **Abstract:** Real-world Image Dehazing (RID) aims to alleviate haze-induced degradation in real-world settings. This task remains challenging due to the complexities in accurately modeling real haze distributions and the scarcity of paired real-world data. To address these challenges, we first introduce a cooperative unfolding network that jointly models atmospheric scattering and image scenes, effectively integrating physical knowledge into deep networks to restore haze-contaminated details. Additionally, we propose the first RID-oriented iterative mean-teacher framework, termed the Coherence-based Label Generator, to generate high-quality pseudo labels for network training. Specifically, we provide an optimal label pool to store the best pseudo-labels during network training, leveraging both global and local coherence to select high-quality candidates and assign weights to prioritize haze-free regions. We verify the effectiveness of our method, with experiments demonstrating that it achieves state-of-the-art performance on RID tasks.  
 
 
@@ -33,7 +39,6 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 - **2024-05-28:** We release this repository, the preprint of full paper will be release soon.
 
 
-
 ## 🔧 Todo 
 - [ ] Complete this repository
 - [x] Release the preprint
@@ -42,8 +47,10 @@ Official Code for "Real-world Image Dehazing with Coherence-based Label Generato
 ## 🔗 Contents
 
 - [ ] Datasets
-- [ ] Training
-- [ ] Testing
+- [ ] Pretrained Weights
+- [ ] Options & Train/Test Scrips
+- [x] Training Code
+- [x] Testing Code
 - [x] [Results](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-results)
 - [x] [Citation](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-citation)
 - [x] [Acknowledgements](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-acknowledgements)
