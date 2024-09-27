@@ -1,0 +1,158 @@
+# GENERATE TIME: Mon May  6 00:56:19 2024
+# CMD:
+# DASUM/train.py -opt CORUN_Options/train_ots_clip_mask.yml --launcher pytorch
+
+# general settings
+name: Desmoke_stage_2
+##注意 这个操作修改了Mask！
+model_type: DASUModel_Clip_Mask
+scale: 1
+num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
+manual_seed: 0
+
+# dataset and data loader settings
+datasets:
+  train:
+    name: TrainSet
+    type: SemiHazeOnlineDataset
+    dataroot_gt: /data/fcy/Datasets/Desmoke/Desmoke-LAP/clear
+    dataroot_depth: /data/fcy/Datasets/Desmoke/Desmoke-LAP/depth
+    dataroot_real: /data/fcy/Datasets/Desmoke/Desmoke-LAP/hazy
+    beta_range: [ 0.2, 1.7 ] #[ 0.15, 1.7 ]
+    A_range: [ 0.25, 1.0 ]
+    color_p: 1.0
+    color_range: [ -0.025, 0.025 ]
+
+    use_resize_crop: true
+    use_flip: true
+    use_rot: false
+
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+    num_worker_per_gpu: 20
+    batch_size_per_gpu: 16
+    mini_batch_sizes: [ 1 ]             # Batch size per gpu
+    iters: [ 50000 ]
+    gt_size: 288   # Max patch size for progressive training
+    gt_sizes: [ 288 ]  # Patch sizes for progressive training.
+
+    # data loader
+    use_shuffle: true
+    dataset_enlarge_ratio: 50
+    prefetch_mode: ~
+
+
+  # Uncomment these for validation
+  val:
+    name: RTTS
+    type: SemiPairedDataset
+    dataroot_lq: /data/fcy/Datasets/Desmoke/Desmoke-LAP/test_clip
+    dataroot_gt: /data/fcy/Datasets/Desmoke/Desmoke-LAP/test_clip
+    gt_size: 256
+    num_worker_per_gpu: 5
+    io_backend:
+      type: disk
+# network structures
+network_g:
+  type: CORUN
+  depth: 4
+
+# path
+path:
+  pretrain_network_g: ~
+  pretrain_network_memory_bank: ~
+  param_key_g: params_ema
+  strict_load_g: true
+  resume_state: ~
+
+# training settings
+train:
+  ema_decay: 0.999
+
+  optim_g:
+    type: AdamW
+    lr: !!float 5e-5
+    weight_decay: 0
+    betas: [0.9, 0.999]
+
+
+  gen_scheduler:
+    type: CosineAnnealingRestartCyclicLR
+    periods: [50000]
+    restart_weights: [1]
+    eta_mins: [0.000001]
+
+
+  total_iter: 50000
+  warmup_iter: -1  # no warm up
+
+  mixing_augs:
+    mixup: false
+    mixup_beta: 1.2
+    use_identity: true
+
+  # losses
+  pixel_opt:
+    type: L1Loss
+    loss_weight: !!float 0.5
+    reduction: none
+
+
+  contrastperceptual_opt:
+    type: ContrastPerceptualLoss
+    # vgg_layer_indices: 2,7,12,21,30
+    # weights: 1/32, 1/16, 1/8, 1/4, 1
+    layer_weights:
+      'relu1_1': !!float 3.125e-2
+      'relu2_1': !!float 6.25e-2
+      'relu3_1': !!float 0.125
+      'relu4_1': !!float 0.25
+      'relu5_1': !!float 1.0
+    vgg_type: vgg19
+    use_input_norm: false # keep in [0,1] range
+    range_norm: false
+    perceptual_weight: !!float 0.2
+    style_weight: 0
+    criterion: l1
+#
+#  tv_opt:
+#    type: TVLoss
+#    loss_weight: !!float 0.1
+
+# Uncomment these for validation
+# validation settings
+
+
+#val:
+#  pbar: true
+#  val_freq: !!float 5000
+#  save_img: true
+#  window_size: 16
+#  save_source: true
+#
+#  metrics:
+#    brisque: # metric name
+#      type: calculate_brisque
+#      crop_border: 0
+#      better: lower
+#
+#    nima:
+#      type: calculate_nima
+#      crop_border: 0
+#      better: higher
+
+# logging settings
+logger:
+  print_freq: 500
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: true
+  wandb:
+    project: ~
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500
