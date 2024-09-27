@@ -1,4 +1,4 @@
-# <p align=center> `CORUN 🏃 | Colabator 🏃🏻‍♂️` </p>
+# <p align=center> `CORUN 🏃 Colabator 🏃🏻‍♂️` </p>
 <b><p align=center> NIPS2024 Spotlight ✨</p></b>
 
 
