@@ -61,7 +61,28 @@ We will finalize all the code before the conference and upload the corresponding
 - [x] [Acknowledgements](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-acknowledgements)
 
 ## ⚙️ Dependencies and Installation
-TBD
+```bash
+git clone https://github.com/cnyvfang/CORUN-Colabator.git
+conda create -n corun_colabator python=3.9
+# If necessary, Replace pytorch-cuda=? with the compatible version of your GPU driver.
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+```
+
+### Install Our Modified BasicSR
+```bash
+cd basicsr_modified
+pip install tb-nightly -i https://mirrors.aliyun.com/pypi/simple # Run this line if in Chinese Mainland
+pip install -r requirements.txt
+python setup.py develop
+cd ..
+```
+
+### Install Our CORUN-Colabator
+```bash
+pip install -r requirements.txt
+python setup.py develop
+```
+
 
 ## 🏃 Train
 TBD
