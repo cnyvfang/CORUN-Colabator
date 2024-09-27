@@ -61,10 +61,13 @@ We will finalize all the code before the conference and upload the corresponding
 - [x] [Acknowledgements](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-acknowledgements)
 
 ## ⚙️ Dependencies and Installation
+TBD
 
 ## 🏃 Train
+TBD
 
 ## 🏃‍♂️ Test
+TBD
 
 ## 🔍 Results
 
