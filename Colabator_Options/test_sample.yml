@@ -5,29 +5,12 @@ scale: 1
 num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
 manual_seed: 0
 
-colabator:
-  use_clip: true
-  use_nr_iqa: true
-  clip_model_type: daclip_ViT-B-32 # clip model name in openclip
-  tokenizer_type: ViT-B-32
-  pretrained_clip_weight: ./daclip_ViT-B-32.pt
-  degradation_type: [1] # only use when clip_model type is daclip
-  # 0: 'motion-blurry', 1: 'hazy', 2: 'jpeg-compressed', 3: 'low-light',
-  # 4: 'noisy', 5: 'raindrop', 6: 'rainy', 7: 'shadowed', 8: 'snowy', 9: 'uncompleted'
-  clip_better: lower
-
-  nr_iqa_type: musiq
-  nr_iqa_better: higher # higher, lower
-  nr_iqa_scale: [0,100] # scale or sigmoid
-
-  block_size: 32 # trusted weight block size
 
 # dataset and data loader settings
 datasets:
-
   # Uncomment these for validation
   val_0:
-    name: EUVP
+    name: RTTS
     type: TestDataset
     dataroot_lq: # test lq image set
     dataroot_gt: # test gt image set or same as test lq image set
@@ -43,17 +26,8 @@ datasets:
 # this is a sample
 # you can modify this part for your network
 network_g:
-  type: Restormer
-  inp_channels: 3
-  out_channels: 3
-  dim: 48
-  num_blocks: [4,6,6,8]
-  num_refinement_blocks: 4
-  heads: [1,2,4,8]
-  ffn_expansion_factor: 1.5
-  bias: False
-  LayerNorm_type: WithBias
-  dual_pixel_task: False
+  type: CORUN
+  depth: 4
 ###########################################
 
 # path
