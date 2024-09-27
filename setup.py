@@ -71,21 +71,20 @@ def get_requirements(filename='requirements.txt'):
         requires = [line.replace('\n', '') for line in f.readlines()]
     return requires
 
-
 if __name__ == '__main__':
     write_version_py()
     setup(
-        name='realesrgan',
+        name='Colabator-pytorch',
         version=get_version(),
-        description='Real-ESRGAN aims at developing Practical Algorithms for General Image Restoration',
+        description='Colabator is a domain adaptation framework.',
         long_description='None',
         long_description_content_type='text/markdown',
-        author='Xintao Wang',
-        author_email='xintao.wang@outlook.com',
-        keywords='computer vision, pytorch, image restoration, super-resolution, esrgan, real-esrgan',
-        url='https://github.com/xinntao/Real-ESRGAN',
+        author='Chengyu Fang',
+        author_email='chengyufang.thu@gmail.com',
+        keywords='computer vision, pytorch, image restoration, domain adaptation',
+        url='https://github.com/cnyvfang/CORUN-Colabator',
         include_package_data=True,
-        packages=find_packages(exclude=('CORUN_Options', 'datasets', 'experiments', 'results', 'tb_logger', 'wandb')),
+        packages=find_packages(exclude=('Colabator_Options', 'datasets', 'experiments', 'results', 'tb_logger', 'wandb')),
         classifiers=[
             'Development Status :: 4 - Beta',
             'License :: OSI Approved :: Apache Software License',
