@@ -2,9 +2,9 @@
 import os.path as osp
 from basicsr.test import test_pipeline
 
-import CORUN_Colabator.archs
-import CORUN_Colabator.data
-import CORUN_Colabator.models
+import corun_colabator.archs
+import corun_colabator.data
+import corun_colabator.models
 
 if __name__ == '__main__':
     root_path = osp.abspath(osp.join(__file__, osp.pardir, osp.pardir))

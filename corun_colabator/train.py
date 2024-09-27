@@ -1,11 +1,11 @@
 # flake8: noqa
 import os.path as osp
-from CORUN_Colabator.train_pipeline import train_pipeline
+from corun_colabator.train_pipeline import train_pipeline
 
-import CORUN_Colabator.archs
-import CORUN_Colabator.data
-import CORUN_Colabator.models
-import CORUN_Colabator.losses
+import corun_colabator.archs
+import corun_colabator.data
+import corun_colabator.models
+import corun_colabator.losses
 import warnings
 
 warnings.filterwarnings("ignore")

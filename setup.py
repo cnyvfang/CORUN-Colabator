@@ -6,7 +6,7 @@ import os
 import subprocess
 import time
 
-version_file = 'CORUN_Colabator/version.py'
+version_file = 'corun_colabator/version.py'
 
 def get_git_hash():
 

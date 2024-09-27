@@ -17,8 +17,8 @@ from basicsr.metrics import calculate_metric
 import pyiqa
 import time
 from tqdm import tqdm
-import CORUN_Colabator.archs.open_clip as open_clip
-import CORUN_Colabator.archs.memory_bank as memory_bank
+import corun_colabator.archs.open_clip as open_clip
+import corun_colabator.archs.memory_bank as memory_bank
 import torchvision.transforms as TF
 from torch.distributed.algorithms.join import Join
 
@@ -53,7 +53,7 @@ class Mixing_Augment:
 
 
 @MODEL_REGISTRY.register()
-class Colabator(SRModel):
+class Colabator_with_Transmission(SRModel):
     """
     It is trained without GAN losses.
     It mainly performs:
@@ -62,7 +62,7 @@ class Colabator(SRModel):
     """
 
     def __init__(self, opt):
-        super(Colabator, self).__init__(opt)
+        super(Colabator_with_Transmission, self).__init__(opt)
         if self.is_train:
             self.mixing_flag = self.opt['train']['mixing_augs'].get('mixup', False)
             if self.mixing_flag:
@@ -162,7 +162,7 @@ class Colabator(SRModel):
                 # image_features /= image_features.norm(dim=-1, keepdim=True)
                 degra_features /= degra_features.norm(dim=-1, keepdim=True)
                 text_probs = (100.0 * degra_features @ self.text_features.T).softmax(dim=-1)
-                probs = text_probs[:,degradation]
+                probs = text_probs[:, degradation]
                 sum_probs = sum_probs + probs
         return sum_probs
 
@@ -170,6 +170,7 @@ class Colabator(SRModel):
         sum_rate = self.get_clip_hazy_rate(imgs)
         sum_rate = sum_rate.mean()
         return sum_rate / imgs.shape[0]
+
 
     def feed_data(self, data):
         self.lq = data['lq'].to(self.device)
@@ -191,7 +192,6 @@ class Colabator(SRModel):
         if self.is_train and self.mixing_flag:
             self.gt, self.lq = self.mixing_augmentation(self.gt, self.lq)
 
-
     def test(self):
         window_size = self.opt['val'].get('window_size', 0)
         if window_size:
@@ -205,21 +205,24 @@ class Colabator(SRModel):
         if hasattr(self, 'net_g_ema'):
             self.net_g_ema.eval()
             with torch.no_grad():
-                self.outputs = self.net_g_ema(lq)
+                self.outputs, self.output_transmissions, self.step_images, self.recon_images = self.net_g_ema(
+                    img=lq, debug=True)
                 self.output = self.outputs[0].clamp(0,1)
         else:
             self.net_g.eval()
             with torch.no_grad():
-                self.outputs = self.net_g(lq)
+                self.outputs, self.output_transmissions, self.step_images, self.recon_images = self.net_g(
+                    img=lq, debug=True)
                 self.output = self.outputs[0].clamp(0,1)
             self.net_g.train()
+
 
         if window_size:
             scale = self.opt.get('scale', 1)
             _, _, h, w = self.output.size()
             self.output = self.output[:, :, 0:h - mod_pad_h * scale, 0:w - mod_pad_w * scale]
 
-    def labal_selection(self, teacher): # teacher is pseudo label
+    def labal_selection(self, teacher_transmission, teacher): # teacher is pseudo label
         teacher_tar = teacher.detach()
         original_shape = teacher_tar.size()
         with torch.no_grad():
@@ -229,14 +232,18 @@ class Colabator(SRModel):
                 # local
                 teacher_nr_iqa_score_sequence = self.nr_iqa(teacher_tar_blocks)
                 # global
-                teacher_nr_iqa_score = (self.nr_iqa(teacher_tar) - self.nr_iqa_scale[0]) / (self.nr_iqa_scale[1] - self.nr_iqa_scale[0])
+                teacher_nr_iqa_score = (self.nr_iqa(teacher_tar) - self.nr_iqa_scale[0]) / (
+                            self.nr_iqa_scale[1] - self.nr_iqa_scale[0])
                 # unblock image
                 if self.nr_iqa_scale is not 'sigmoid':
                     teacher_nr_iqa_score_mask = (self.unblock_image(teacher_nr_iqa_score_sequence,
-                                                               (self.block_size, self.block_size), original_shape) - self.nr_iqa_scale[0]) / (self.nr_iqa_scale[1] - self.nr_iqa_scale[0])
+                                                                    (self.block_size, self.block_size),
+                                                                    original_shape) - self.nr_iqa_scale[0]) / (
+                                                            self.nr_iqa_scale[1] - self.nr_iqa_scale[0])
                 else:
                     teacher_nr_iqa_score_mask = torch.sigmoid(self.unblock_image(teacher_nr_iqa_score_sequence,
-                                                               (self.block_size, self.block_size), original_shape))
+                                                                                 (self.block_size, self.block_size),
+                                                                                 original_shape))
                 if self.nr_iqa_better is 'higher':
                     teacher_nr_iqa_score_mask = teacher_nr_iqa_score_mask
                     teacher_nr_iqa_score = teacher_nr_iqa_score
@@ -253,8 +260,9 @@ class Colabator(SRModel):
                 # global
                 teacher_score = self.get_clip_hazy_rate(teacher_tar)
                 # unblock image
-                teacher_score_mask = len(self.degradation_type) - self.unblock_image(teacher_score_sequence, (self.block_size, self.block_size),
-                                                            original_shape)
+                teacher_score_mask = len(self.degradation_type) - self.unblock_image(teacher_score_sequence,
+                                                                                     (self.block_size, self.block_size),
+                                                                                     original_shape)
                 if self.clip_better is 'higher':
                     teacher_score = teacher_score
                     teacher_score_mask = teacher_score_mask
@@ -268,10 +276,12 @@ class Colabator(SRModel):
         # final mask
         teacher_mask = (teacher_nr_iqa_score_mask + teacher_score_mask) / (len(self.degradation_type) + 1)
 
-        teacher, teacher_nr_iqa_score, teacher_score, teacher_mask = self.memory_bank(self.real_name, teacher, teacher_nr_iqa_score, teacher_score, self.device, teacher_mask)
+        teacher, teacher_transmission, teacher_nr_iqa_score, teacher_score, teacher_mask = self.memory_bank(self.real_name, teacher, teacher_transmission, teacher_nr_iqa_score, teacher_score, self.device, teacher_mask)
         teacher = teacher.to(self.device)
+        teacher_transmission = teacher_transmission.to(self.device)
 
-        return teacher, teacher_mask
+        return teacher_transmission, teacher, teacher_mask
+
 
 
     def optimize_parameters(self, current_iter, log_vars=None):
@@ -279,17 +289,22 @@ class Colabator(SRModel):
             self.save_memory_bank(current_iter)
 
         self.optimizer_g.zero_grad()
-        outputs = self.net_g(self.lq)
+        outputs, transmissions = self.net_g(self.lq, finetune=True)
         output = outputs[0].clamp(0, 1)
+        transmission = transmissions[0]
+        recon_lq = output * transmission + (1 - transmission)
 
         with torch.no_grad():
-            pseudo_label = self.net_g_ema(self.real)
+            pseudo_label, pseudo_transmission = self.net_g_ema(self.real, finetune=True)
 
         pseudo_label = pseudo_label[0].clamp(0, 1)
+        pseudo_transmission = pseudo_transmission[0]
 
-        real_outputs = self.net_g(self.real_strong)
+        real_outputs, real_transmissions = self.net_g(self.real_strong, finetune=True)
         real_output = real_outputs[0]
-        pseudo_label, pseudo_mask = self.labal_selection(pseudo_label)
+        real_transmission = real_transmissions[0]
+        pseudo_transmission, pseudo_label, pseudo_mask = self.labal_selection(pseudo_transmission, pseudo_label)
+        recon_real_lq = real_output * real_transmission + (1 - real_transmission)
 
         ###########################################
         # this is a sample
@@ -305,6 +320,10 @@ class Colabator(SRModel):
             loss_dict['l_pix'] = l_pix
             l_pix = l_pix * 5
             l_total += l_pix
+
+            l_asm = (self.cri_pix(recon_real_lq, self.real_strong) * pseudo_mask).mean() * 0.01
+            loss_dict['l_asm'] = l_asm
+            l_total += l_asm
 
         if self.opt['train'].get('use_clip_loss', False):
             clip_loss = self.get_batch_avg_hazy_rate(output)
@@ -331,6 +350,7 @@ class Colabator(SRModel):
 
         ###########################################
 
+
         l_total.backward()
         self.optimizer_g.step()
 
@@ -338,8 +358,3 @@ class Colabator(SRModel):
             self.model_ema(decay=self.ema_decay)
 
         self.log_dict = self.reduce_loss_dict(loss_dict)
-
-
-
-
-

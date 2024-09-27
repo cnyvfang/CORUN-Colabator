@@ -33,8 +33,8 @@ def mkdir_and_rename(path):
         print(f'Path already exists. Rename it to {new_name}', flush=True)
         os.rename(path, new_name)
     os.makedirs(path, exist_ok=True)
-    os.system(f'cp -r ./BasicSR-master {path}')
-    os.system(f'cp -r ./CORUN_Colabator {path}')
+    os.system(f'cp -r ./basicsr_modified {path}')
+    os.system(f'cp -r ./corun_colabator {path}')
 
 
 @master_only

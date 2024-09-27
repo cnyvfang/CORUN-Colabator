@@ -3,13 +3,13 @@ from collections import OrderedDict
 from os import path as osp
 from tqdm import tqdm
 
-from CORUN_Colabator.archs import build_network
+from corun_colabator.archs import build_network
 from basicsr.losses import build_loss
 from basicsr.metrics import calculate_metric
 from basicsr.utils import get_root_logger, imwrite, tensor2img
 from basicsr.utils.registry import MODEL_REGISTRY
 from basicsr.models.base_model import BaseModel
-from CORUN_Colabator.models import lr_scheduler as lr_scheduler
+from corun_colabator.models import lr_scheduler as lr_scheduler
 
 from torch.nn.parallel import DataParallel, DistributedDataParallel
 import torch.nn as nn

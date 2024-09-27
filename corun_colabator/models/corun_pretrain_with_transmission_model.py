@@ -17,7 +17,7 @@ from basicsr.metrics import calculate_metric
 import pyiqa
 import time
 from tqdm import tqdm
-import CORUN_Colabator.archs.open_clip as open_clip
+import corun_colabator.archs.open_clip as open_clip
 
 class Mixing_Augment:
     def __init__(self, mixup_beta, use_identity, device):
@@ -50,7 +50,7 @@ class Mixing_Augment:
 
 
 @MODEL_REGISTRY.register()
-class Pretrain(SRModel):
+class CORUN_Pretrain_with_Transmission(SRModel):
     """
     It is trained without GAN losses.
     It mainly performs:
@@ -59,7 +59,7 @@ class Pretrain(SRModel):
     """
 
     def __init__(self, opt):
-        super(Pretrain, self).__init__(opt)
+        super(CORUN_Pretrain_with_Transmission, self).__init__(opt)
         if self.is_train:
             self.mixing_flag = self.opt['train']['mixing_augs'].get('mixup', False)
             if self.mixing_flag:
@@ -69,7 +69,6 @@ class Pretrain(SRModel):
 
         if self.is_train:
             self.init_clip()
-
 
     def init_clip(self):
         checkpoint = './daclip_ViT-B-32.pt'
@@ -88,10 +87,13 @@ class Pretrain(SRModel):
             text_features /= text_features.norm(dim=-1, keepdim=True)
             self.text_features = text_features
 
+
     def feed_data(self, data):
         self.lq = data['lq'].to(self.device)
         if 'gt' in data:
             self.gt = data['gt'].to(self.device)
+        if 't' in data:
+            self.transmission = data['t'].to(self.device)
 
         if self.is_train and self.mixing_flag:
             self.gt, self.lq = self.mixing_augmentation(self.gt, self.lq)
@@ -120,14 +122,14 @@ class Pretrain(SRModel):
         if hasattr(self, 'net_g_ema'):
             self.net_g_ema.eval()
             with torch.no_grad():
-                self.outputs = self.net_g_ema(
-                    lq)
+                self.outputs, self.output_transmissions, self.step_images, self.recon_images = self.net_g_ema(
+                    img=lq, debug=True)
                 self.output = self.outputs[0].clamp(0,1)
         else:
             self.net_g.eval()
             with torch.no_grad():
-                self.outputs = self.net_g(
-                    lq)
+                self.outputs, self.output_transmissions, self.step_images, self.recon_images = self.net_g(
+                    img=lq, debug=True)
                 self.output = self.outputs[0].clamp(0,1)
             self.net_g.train()
 
@@ -155,7 +157,8 @@ class Pretrain(SRModel):
 
     def optimize_parameters(self, current_iter):
         self.optimizer_g.zero_grad()
-        self.outputs = self.net_g(self.lq)
+        self.outputs, transmissions = self.net_g(self.lq, finetune=True)
+        hazy_recon = self.outputs[0] * transmissions[0] + (1 - transmissions[0])
 
         l_total = 0
         loss_dict = OrderedDict()
@@ -167,6 +170,10 @@ class Pretrain(SRModel):
             loss_dict['l_pix'] = l_pix
             l_total += l_pix
 
+            if self.opt["train"].get("asm_loss", True) is True:
+                l_asm = self.cri_pix(hazy_recon, self.lq) * 0.01
+                loss_dict['l_asm'] = l_asm
+                l_total += l_asm
 
         clip_loss = self.get_batch_avg_hazy_rate(self.outputs[0])
         loss_dict['clip_loss'] = clip_loss
@@ -191,12 +198,63 @@ class Pretrain(SRModel):
         if self.ema_decay > 0:
             self.model_ema(decay=self.ema_decay)
 
+    def save_all_stages_img(self, img_name, current_iter):
+
+        if hasattr(self, 'gt'):
+            output = torch.cat([self.lq, self.output, self.gt], dim=2)
+        else:
+            output = torch.cat([self.lq, self.output], dim=2)
+
+        output_transmissions = self.output_transmissions[::-1]
+        step_images = self.step_images[::-1]
+        recon_images = self.recon_images[::-1]
+
+        output_transmission = output_transmissions[0]
+        step_image = step_images[0]
+        recon_image = recon_images[0]
+
+        for t in range(1, len(self.outputs)):
+            step_image = torch.cat((step_image, step_images[t]), 2)
+            output_transmission = torch.cat((output_transmission, output_transmissions[t]), 2)
+            recon_image = torch.cat((recon_image, recon_images[t]), 2)
+
+
+        # save image
+        save_img_path = osp.join(self.opt['path']['visualization'], img_name,
+                                 f'{img_name}_{current_iter}_compare_img.png')
+        save_trans_path = osp.join(self.opt['path']['visualization'], img_name,
+                                   f'{img_name}_{current_iter}_step_trans.png')
+        save_gt_path = osp.join(self.opt['path']['visualization'], img_name,
+                                      f'{img_name}_{current_iter}_gt.png')
+        save_recon_path = osp.join(self.opt['path']['visualization'], img_name,
+                                        f'{img_name}_{current_iter}_step_recon.png')
+        save_step_path = osp.join(self.opt['path']['visualization'], img_name,
+                                        f'{img_name}_{current_iter}_step.png')
+
+
+        output = output.detach().cpu()
+        output_transmission = output_transmission.detach().cpu()
+        step_img = step_image.detach().cpu()
+        recon_img = recon_image.detach().cpu()
+
+        gt_img = self.gt.detach().cpu()
+        imwrite(tensor2img(output), save_img_path)
+        imwrite(tensor2img(output_transmission),save_trans_path)
+        imwrite(tensor2img(gt_img), save_gt_path)
+        imwrite(tensor2img(recon_img), save_recon_path)
+        imwrite(tensor2img(step_img), save_step_path)
+
+        del output
+        del output_transmission
+        del step_img
+        del recon_img
+        del gt_img
+
     def nondist_validation(self, dataloader, current_iter, tb_logger, save_img):
         dataset_name = dataloader.dataset.opt['name']
         with_metrics = self.opt['val'].get('metrics') is not None
         use_pbar = self.opt['val'].get('pbar', False)
         save_source_img = self.opt['val'].get('save_source', False)
-
 
         if with_metrics:
             if not hasattr(self, 'metric_results'):  # only execute in the first run
@@ -216,6 +274,9 @@ class Pretrain(SRModel):
             self.feed_data(val_data)
             self.test()
 
+            if save_img and self.opt['is_train']:
+                self.save_all_stages_img(img_name, current_iter)
+
             visuals = self.get_current_visuals()
             sr_img = tensor2img([visuals['result']])
 
@@ -232,6 +293,9 @@ class Pretrain(SRModel):
             del self.lq
             del self.output
             del self.outputs
+            del self.output_transmissions
+            del self.step_images
+            del self.recon_images
 
             torch.cuda.empty_cache()
 
@@ -248,10 +312,10 @@ class Pretrain(SRModel):
                             save_lq_path = osp.join(self.opt['path']['visualization'], dataset_name,
                                                 f'{img_name}_lq.png')
 
-
                 imwrite(sr_img, save_img_path)
                 if save_source_img:
                     imwrite(lq_img, save_lq_path)
+
 
             if with_metrics:
                 # calculate metrics
