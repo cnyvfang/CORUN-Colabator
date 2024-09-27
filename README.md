@@ -1,7 +1,16 @@
-# CORUN 🏃 | Colabator 🏃🏻‍♂️
-Official Code for "Real-world Image Dehazing with Coherence-based Label Generator and Cooperative Unfolding Network" <a href='https://arxiv.org/pdf/2406.07966'><img src='https://img.shields.io/badge/ArXiv-2406.07966-red'></a> 
+# <p align=center> `CORUN 🏃 | Colabator 🏃🏻‍♂️` </p>
+<p align=center> <b>NIPS2024 Spotlight ✨</p>
 
-[Chengyu Fang](https://cnyvfang.github.io/), [Chunming He](https://chunminghe.github.io/), Fengyang Xiao, [Yulun Zhang](https://yulunzhang.com), Longxiang Tang, Yuelin Zhang, [Kai Li](https://kailigo.github.io), and Xiu Li
+
+<a href='https://arxiv.org/pdf/2406.07966'><img src='https://img.shields.io/badge/ArXiv-2406.07966-red'></a>
+This is the official PyTorch codes for the paper. 
+>**Real-world Image Dehazing with Coherence-based Label Generator and Cooperative Unfolding Network**<br>  [Chengyu Fang](https://cnyvfang.github.io/), [Chunming He](https://chunminghe.github.io/), Fengyang Xiao, [Yulun Zhang](https://yulunzhang.com), Longxiang Tang, Yuelin Zhang, [Kai Li](https://kailigo.github.io), and Xiu Li
+<br>
+> Neural Information Processing Systems 2024 (Spotlight Paper)
+<br>
+> 
+
+
 
 ```
 The code is currently being cleaned and organized.
@@ -45,16 +54,20 @@ We will finalize all the code before the conference and upload the corresponding
 
 
 ## 🔗 Contents
-- [ ] Results
+- [ ] Result Files
 - [ ] Datasets
 - [ ] Pretrained Weights
-- [ ] Options & Train/Test Scrips
+- [ ] Options
+- [ ] Train/Test Scrips
 - [x] Training Code
 - [x] Testing Code
 - [x] [Results](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-results)
 - [x] [Citation](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-citation)
 - [x] [Acknowledgements](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-acknowledgements)
 
+## 🏃 Train
+
+## 🏃‍♂️ Test
 
 ## 🔍 Results
 
