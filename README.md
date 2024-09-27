@@ -6,9 +6,7 @@
 This is the official PyTorch codes for the paper. 
 >**Real-world Image Dehazing with Coherence-based Label Generator and Cooperative Unfolding Network** <br> [Chengyu Fang](https://cnyvfang.github.io/), [Chunming He](https://chunminghe.github.io/), Fengyang Xiao, [Yulun Zhang](https://yulunzhang.com), Longxiang Tang, Yuelin Zhang, [Kai Li](https://kailigo.github.io), and Xiu Li <br>
 > Advances in Neural Information Processing Systems 2024<br>
-> 
-
-
+>
 
 ```
 The code is currently being cleaned and organized.
@@ -16,10 +14,10 @@ There might be issues with the code in the repository at this moment.
 We will finalize all the code before the conference and upload the corresponding scripts and pre-trained weights.
 ```
 
-**Abstract:** Real-world Image Dehazing (RID) aims to alleviate haze-induced degradation in real-world settings. This task remains challenging due to the complexities in accurately modeling real haze distributions and the scarcity of paired real-world data. To address these challenges, we first introduce a cooperative unfolding network that jointly models atmospheric scattering and image scenes, effectively integrating physical knowledge into deep networks to restore haze-contaminated details. Additionally, we propose the first RID-oriented iterative mean-teacher framework, termed the Coherence-based Label Generator, to generate high-quality pseudo labels for network training. Specifically, we provide an optimal label pool to store the best pseudo-labels during network training, leveraging both global and local coherence to select high-quality candidates and assign weights to prioritize haze-free regions. We verify the effectiveness of our method, with experiments demonstrating that it achieves state-of-the-art performance on RID tasks.  
+[//]: # (**Abstract:** Real-world Image Dehazing &#40;RID&#41; aims to alleviate haze-induced degradation in real-world settings. This task remains challenging due to the complexities in accurately modeling real haze distributions and the scarcity of paired real-world data. To address these challenges, we first introduce a cooperative unfolding network that jointly models atmospheric scattering and image scenes, effectively integrating physical knowledge into deep networks to restore haze-contaminated details. Additionally, we propose the first RID-oriented iterative mean-teacher framework, termed the Coherence-based Label Generator, to generate high-quality pseudo labels for network training. Specifically, we provide an optimal label pool to store the best pseudo-labels during network training, leveraging both global and local coherence to select high-quality candidates and assign weights to prioritize haze-free regions. We verify the effectiveness of our method, with experiments demonstrating that it achieves state-of-the-art performance on RID tasks.  )
 
 
-<details>
+<details open>
 <summary>🏃 The architecture of the proposed CORUN with the details at k-th stage (CORUN)</summary>
 <center>
     <img
@@ -27,7 +25,7 @@ We will finalize all the code before the conference and upload the corresponding
 </center>
 </details>
 
-<details>
+<details open>
 <summary>🏃🏻‍♂️ The plug-and-play Coherence-based Pseudo Labeling paradigm (Colabator)</summary>
 <center>
     <img
@@ -63,6 +61,8 @@ We will finalize all the code before the conference and upload the corresponding
 - [x] [Citation](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-citation)
 - [x] [Acknowledgements](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-acknowledgements)
 
+## ⚙️ Dependencies and Installation
+
 ## 🏃 Train
 
 ## 🏃‍♂️ Test
@@ -91,10 +91,6 @@ We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and c
 <details> 
 <summary>Visual Comparison (click to expand)</summary>
 
-- Results of cutting-edge methods based on deep unfolding networks.
-  <p align="center">
-  <img width="900" src="figs/DUN.jpg">
-  </p>
 - Visual comparison on RTTS
   <p align="center">
   <img width="900" src="figs/RTTS.jpg">
