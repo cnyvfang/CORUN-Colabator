@@ -61,6 +61,7 @@ We will finalize all the code before the conference and upload the corresponding
 - [x] [Acknowledgements](https://github.com/cnyvfang/CORUN-Colabator/blob/main/README.md#-acknowledgements)
 
 ## ⚙️ Dependencies and Installation
+### Init Conda Environment and Clone Repo
 ```bash
 git clone https://github.com/cnyvfang/CORUN-Colabator.git
 conda create -n corun_colabator python=3.9
@@ -68,7 +69,7 @@ conda create -n corun_colabator python=3.9
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
 
-### Install Our Modified BasicSR
+### Install Modified BasicSR
 ```bash
 cd basicsr_modified
 pip install tb-nightly -i https://mirrors.aliyun.com/pypi/simple # Run this line if in Chinese Mainland
