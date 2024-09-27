@@ -1,11 +1,11 @@
 # flake8: noqa
 import os.path as osp
-from DASUM.train_pipeline import train_pipeline
+from CORUN_Colabator.train_pipeline import train_pipeline
 
-import DASUM.archs
-import DASUM.data
-import DASUM.models
-import DASUM.losses
+import CORUN_Colabator.archs
+import CORUN_Colabator.data
+import CORUN_Colabator.models
+import CORUN_Colabator.losses
 import warnings
 
 warnings.filterwarnings("ignore")

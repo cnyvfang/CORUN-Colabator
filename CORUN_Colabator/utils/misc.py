@@ -34,7 +34,7 @@ def mkdir_and_rename(path):
         os.rename(path, new_name)
     os.makedirs(path, exist_ok=True)
     os.system(f'cp -r ./BasicSR-master {path}')
-    os.system(f'cp -r ./DASUM {path}')
+    os.system(f'cp -r ./CORUN_Colabator {path}')
 
 
 @master_only

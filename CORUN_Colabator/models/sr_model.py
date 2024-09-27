@@ -3,13 +3,13 @@ from collections import OrderedDict
 from os import path as osp
 from tqdm import tqdm
 
-from DASUM.archs import build_network
+from CORUN_Colabator.archs import build_network
 from basicsr.losses import build_loss
 from basicsr.metrics import calculate_metric
 from basicsr.utils import get_root_logger, imwrite, tensor2img
 from basicsr.utils.registry import MODEL_REGISTRY
 from basicsr.models.base_model import BaseModel
-from DASUM.models import lr_scheduler as lr_scheduler
+from CORUN_Colabator.models import lr_scheduler as lr_scheduler
 
 from torch.nn.parallel import DataParallel, DistributedDataParallel
 import torch.nn as nn
@@ -21,9 +21,6 @@ import cv2
 import pyiqa
 
 from torch.nn import functional as F
-
-from DASUM.archs.bccr_arch import image_dehazer
-
 
 
 class SRModel(BaseModel):

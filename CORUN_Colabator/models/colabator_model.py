@@ -17,8 +17,8 @@ from basicsr.metrics import calculate_metric
 import pyiqa
 import time
 from tqdm import tqdm
-import DASUM.archs.open_clip as open_clip
-import DASUM.archs.memory_bank as memory_bank
+import CORUN_Colabator.archs.open_clip as open_clip
+import CORUN_Colabator.archs.memory_bank as memory_bank
 import torchvision.transforms as TF
 from torch.distributed.algorithms.join import Join
 

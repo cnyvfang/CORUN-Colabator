@@ -1,8 +1,8 @@
 import argparse
 from os import path as osp
 
-from DASUM.utils import scandir
-from DASUM.utils.lmdb_util import make_lmdb_from_imgs
+from CORUN_Colabator.utils import scandir
+from CORUN_Colabator.utils.lmdb_util import make_lmdb_from_imgs
 
 def prepare_keys(folder_path, suffix='png'):
     """Prepare image path list and keys for DIV2K dataset.

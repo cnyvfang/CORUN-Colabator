@@ -5,8 +5,8 @@ import torch
 from os import path as osp
 from torch.nn import functional as F
 
-from DASUM.data.transforms import mod_crop
-from DASUM.utils import img2tensor, scandir
+from CORUN_Colabator.data.transforms import mod_crop
+from CORUN_Colabator.utils import img2tensor, scandir
 import random
 import os
 

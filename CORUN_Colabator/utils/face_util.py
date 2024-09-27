@@ -4,7 +4,7 @@ import os
 import torch
 from skimage import transform as trans
 
-from DASUM.utils import imwrite
+from CORUN_Colabator.utils import imwrite
 
 try:
     import dlib
