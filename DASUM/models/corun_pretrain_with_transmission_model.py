@@ -67,21 +67,25 @@ class CORUN_Pretrain_with_Transmission(SRModel):
                 use_identity = self.opt['train']['mixing_augs'].get('use_identity', False)
                 self.mixing_augmentation = Mixing_Augment(mixup_beta, use_identity, self.device)
 
-            checkpoint = './daclip_ViT-B-32.pt'
-            self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained('daclip_ViT-B-32',
-                                                                                           pretrained=checkpoint)
-            self.clip_model = self.model_to_device(self.clip_model)
-            self.clip_model.eval()
-            self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
-            degradations = ['motion-blurry', 'hazy', 'jpeg-compressed', 'low-light', 'noisy', 'raindrop', 'rainy',
-                            'shadowed', 'snowy', 'uncompleted']
-            text = self.tokenizer(degradations)
-            text = text.to(self.device)
+        if self.is_train:
+            self.init_clip()
 
-            with torch.no_grad(), torch.cuda.amp.autocast():
-                text_features = self.clip_model.module.encode_text(text)
-                text_features /= text_features.norm(dim=-1, keepdim=True)
-                self.text_features = text_features
+    def init_clip(self):
+        checkpoint = './daclip_ViT-B-32.pt'
+        self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained('daclip_ViT-B-32',
+                                                                                       pretrained=checkpoint)
+        self.clip_model = self.model_to_device(self.clip_model)
+        self.clip_model.eval()
+        self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
+        degradations = ['motion-blurry', 'hazy', 'jpeg-compressed', 'low-light', 'noisy', 'raindrop', 'rainy',
+                        'shadowed', 'snowy', 'uncompleted']
+        text = self.tokenizer(degradations)
+        text = text.to(self.device)
+
+        with torch.no_grad(), torch.cuda.amp.autocast():
+            text_features = self.clip_model.module.encode_text(text)
+            text_features /= text_features.norm(dim=-1, keepdim=True)
+            self.text_features = text_features
 
 
     def feed_data(self, data):

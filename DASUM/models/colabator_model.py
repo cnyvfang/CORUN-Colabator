@@ -70,38 +70,47 @@ class Colabator(SRModel):
                 use_identity = self.opt['train']['mixing_augs'].get('use_identity', False)
                 self.mixing_augmentation = Mixing_Augment(mixup_beta, use_identity, self.device)
 
+        if self.is_train:
             if self.opt['colabator'].get('use_clip', False) or self.opt['train'].get('use_clip_loss', False):
-                clip_model_type = self.opt['colabator'].get('clip_model_name', None)
-                checkpoint = self.opt['colabator'].get('pretrained_clip_weight', None)
-                tokenizer_type = self.opt['colabator'].get('tokenizer_type', None)
-                self.clip_better = self.opt['colabator'].get('clip_better', None)
-                self.degradation_type = self.opt['colabator'].get('degradation_type', None)
-                self.block_size = self.opt['colabator'].get('block_size', None)
-                self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained(clip_model_type, pretrained=checkpoint)
-                self.clip_model = self.model_to_device(self.clip_model)
-                self.clip_model.eval()
-                self.tokenizer = open_clip.get_tokenizer(tokenizer_type)
-                degradations = ['motion-blurry', 'hazy', 'jpeg-compressed', 'low-light', 'noisy', 'raindrop', 'rainy',
-                                'shadowed', 'snowy', 'uncompleted']
-                text = self.tokenizer(degradations)
-                text = text.to(self.device)
-
-                with torch.no_grad(), torch.cuda.amp.autocast():
-                    text_features = self.clip_model.module.encode_text(text)
-                    text_features /= text_features.norm(dim=-1, keepdim=True)
-                    self.text_features = text_features
-
+                self.init_clip()
             if self.opt['colabator'].get('use_nr_iqa', False):
-                nr_iqa_type = self.opt['colabator'].get('nr_iqa_type', None)
-                self.nr_iqa_better = self.opt['colabator'].get('nr_iqa_better', None)
-                self.nr_iqa_scale = self.opt['colabator'].get('nr_iqa_scale', None)
-                self.nr_iqa = pyiqa.create_metric(nr_iqa_type)
-                self.nr_iqa = self.model_to_device(self.nr_iqa).eval()
+                self.init_nriqa()
+            self.init_mmb()
 
-            self.memory_bank = memory_bank.Memory_bank_woT().to('cpu')
-            memory_bank_path = self.opt['path'].get('pretrain_network_memory_bank', None)
-            if memory_bank_path is not None:
-                self.memory_bank.load_state_dict(torch.load(memory_bank_path))
+    def init_clip(self):
+        clip_model_type = self.opt['colabator'].get('clip_model_name', None)
+        checkpoint = self.opt['colabator'].get('pretrained_clip_weight', None)
+        tokenizer_type = self.opt['colabator'].get('tokenizer_type', None)
+        self.clip_better = self.opt['colabator'].get('clip_better', None)
+        self.degradation_type = self.opt['colabator'].get('degradation_type', None)
+        self.block_size = self.opt['colabator'].get('block_size', None)
+        self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained(clip_model_type,
+                                                                                       pretrained=checkpoint)
+        self.clip_model = self.model_to_device(self.clip_model)
+        self.clip_model.eval()
+        self.tokenizer = open_clip.get_tokenizer(tokenizer_type)
+        degradations = ['motion-blurry', 'hazy', 'jpeg-compressed', 'low-light', 'noisy', 'raindrop', 'rainy',
+                        'shadowed', 'snowy', 'uncompleted']
+        text = self.tokenizer(degradations)
+        text = text.to(self.device)
+
+        with torch.no_grad(), torch.cuda.amp.autocast():
+            text_features = self.clip_model.module.encode_text(text)
+            text_features /= text_features.norm(dim=-1, keepdim=True)
+            self.text_features = text_features
+
+    def init_nriqa(self):
+        nr_iqa_type = self.opt['colabator'].get('nr_iqa_type', None)
+        self.nr_iqa_better = self.opt['colabator'].get('nr_iqa_better', None)
+        self.nr_iqa_scale = self.opt['colabator'].get('nr_iqa_scale', None)
+        self.nr_iqa = pyiqa.create_metric(nr_iqa_type)
+        self.nr_iqa = self.model_to_device(self.nr_iqa).eval()
+
+    def init_mmb(self):
+        self.memory_bank = memory_bank.Memory_bank_woT().to('cpu')
+        memory_bank_path = self.opt['path'].get('pretrain_network_memory_bank', None)
+        if memory_bank_path is not None:
+            self.memory_bank.load_state_dict(torch.load(memory_bank_path))
 
     def block_image(self, image, block_size):
         B, C, H, W = image.size()
