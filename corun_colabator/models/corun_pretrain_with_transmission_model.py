@@ -182,9 +182,10 @@ class CORUN_Pretrain_with_Transmission(SRModel):
                 loss_dict['l_asm'] = l_asm
                 l_total += l_asm
 
-        clip_loss = self.get_batch_avg_hazy_rate(self.outputs[0])
-        loss_dict['clip_loss'] = clip_loss
-        l_total += clip_loss
+        if self.opt['train'].get('use_clip_loss', False):
+            clip_loss = self.get_batch_avg_hazy_rate(self.outputs[0])
+            loss_dict['clip_loss'] = clip_loss
+            l_total += clip_loss
 
         # perceptual loss
         if self.cri_contrastperceptual:
