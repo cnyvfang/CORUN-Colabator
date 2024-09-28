@@ -2,3 +2,4 @@ pyiqa
 timm
 einops
 tqdm
+mat73

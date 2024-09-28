@@ -78,7 +78,7 @@ class Colabator(SRModel):
             self.init_mmb()
 
     def init_clip(self):
-        clip_model_type = self.opt['colabator'].get('clip_model_name', None)
+        clip_model_type = self.opt['colabator'].get('clip_model_type', None)
         checkpoint = self.opt['colabator'].get('pretrained_clip_weight', None)
         tokenizer_type = self.opt['colabator'].get('tokenizer_type', None)
         self.clip_better = self.opt['colabator'].get('clip_better', None)
@@ -231,13 +231,13 @@ class Colabator(SRModel):
                 # global
                 teacher_nr_iqa_score = (self.nr_iqa(teacher_tar) - self.nr_iqa_scale[0]) / (self.nr_iqa_scale[1] - self.nr_iqa_scale[0])
                 # unblock image
-                if self.nr_iqa_scale is not 'sigmoid':
+                if self.nr_iqa_scale != 'sigmoid':
                     teacher_nr_iqa_score_mask = (self.unblock_image(teacher_nr_iqa_score_sequence,
                                                                (self.block_size, self.block_size), original_shape) - self.nr_iqa_scale[0]) / (self.nr_iqa_scale[1] - self.nr_iqa_scale[0])
                 else:
                     teacher_nr_iqa_score_mask = torch.sigmoid(self.unblock_image(teacher_nr_iqa_score_sequence,
                                                                (self.block_size, self.block_size), original_shape))
-                if self.nr_iqa_better is 'higher':
+                if self.nr_iqa_better == 'higher':
                     teacher_nr_iqa_score_mask = teacher_nr_iqa_score_mask
                     teacher_nr_iqa_score = teacher_nr_iqa_score
                 else:
@@ -255,7 +255,7 @@ class Colabator(SRModel):
                 # unblock image
                 teacher_score_mask = len(self.degradation_type) - self.unblock_image(teacher_score_sequence, (self.block_size, self.block_size),
                                                             original_shape)
-                if self.clip_better is 'higher':
+                if self.clip_better == 'higher':
                     teacher_score = teacher_score
                     teacher_score_mask = teacher_score_mask
                 else:

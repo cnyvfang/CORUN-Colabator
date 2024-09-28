@@ -72,7 +72,10 @@ cd ..
 ```bash
 pip install -r requirements.txt
 python setup.py develop
+python init_modules.py
 ```
+
+Download the pre-trained da-clip weights and put it in `./pretrained_weights/`. You can download the daclip weights we used from [here](). You can also choose other type of clip models and corresponding weights from openclip, if you do this, don't forget to modify your options.
 
 
 ## 🏃 Train

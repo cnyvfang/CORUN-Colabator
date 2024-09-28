@@ -30,7 +30,7 @@ def uint2single(img):
     return np.float32(img / 255.)
 def single2uint(img):
     return np.uint8((img.clip(0, 1) * 255.).round())
-def random_resize(img, scale_factor=1.):
+def factor_resize(img, scale_factor=1.):
     return cv2.resize(img, None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_CUBIC)
 def add_Gaussian_noise(img, noise_level1=2, noise_level2=25):
     noise_level = random.randint(noise_level1, noise_level2)
@@ -174,13 +174,16 @@ class HazeOnlineDataset(data.Dataset):
                     resize_factor = input_gt_random_size / input_gt_size
                 else:
                     resize_factor = (gt_size + 1) / input_gt_size
-                img_gt = random_resize(img_gt, resize_factor)
-                img_lq = random_resize(img_lq, resize_factor)
-                t = random_resize(t, resize_factor)
+                img_gt = factor_resize(img_gt, resize_factor)
+                img_lq = factor_resize(img_lq, resize_factor)
+                t = factor_resize(t, resize_factor)
 
                 # random crop
-                img_gt, img_lq, t = triple_random_crop(img_gt, img_lq, t, gt_size, input_gt_size // input_lq_size,
+                img_gt, img_lq, t = triple_random_crop(img_gt, img_lq, t, gt_size, scale,
                                                     gt_path)
+            else:
+                img_gt, img_lq, t = triple_random_crop(img_gt, img_lq, t, gt_size, scale,
+                                                       gt_path)
 
             # flip, rotation
             img_gt, img_lq, t = augment([img_gt, img_lq, t], self.opt['use_flip'],
@@ -338,9 +341,9 @@ class SemiHazeOnlineDataset(data.Dataset):
                     resize_factor = input_gt_random_size / input_gt_size
                 else:
                     resize_factor = (gt_size + 1) / input_gt_size
-                img_gt = random_resize(img_gt, resize_factor)
-                img_lq = random_resize(img_lq, resize_factor)
-                t = random_resize(t, resize_factor)
+                img_gt = factor_resize(img_gt, resize_factor)
+                img_lq = factor_resize(img_lq, resize_factor)
+                t = factor_resize(t, resize_factor)
 
 
                 # resize_factor = (gt_size + 1) / input_real_size # resize to gt_size
@@ -349,6 +352,9 @@ class SemiHazeOnlineDataset(data.Dataset):
                 # random crop
                 img_gt, img_lq, t = triple_random_crop(img_gt, img_lq, t, gt_size, input_gt_size // input_lq_size,
                                                     gt_path)
+            else:
+                img_gt, img_lq, t = triple_random_crop(img_gt, img_lq, t, gt_size, input_gt_size // input_lq_size,
+                                                       gt_path)
 
 
             # flip, rotation

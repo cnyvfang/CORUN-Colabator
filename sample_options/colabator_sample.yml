@@ -1,7 +1,7 @@
 name: NAME_OF_EXPERIMENT
-model_type: Colabator_with_Transmission
+model_type: Colabator
 scale: 1
-num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
+num_gpu: auto
 manual_seed: 0
 
 colabator:
@@ -9,8 +9,9 @@ colabator:
   use_nr_iqa: true
   clip_model_type: daclip_ViT-B-32 # clip model name in openclip
   tokenizer_type: ViT-B-32
-  pretrained_clip_weight: ./daclip_ViT-B-32.pt
-  degradation_type: [1] # only use when clip_model type is daclip
+  pretrained_clip_weight: ./pretrained_weights/daclip_ViT-B-32.pt
+  degradation_type: [1]
+  # for daclip
   # 0: 'motion-blurry', 1: 'hazy', 2: 'jpeg-compressed', 3: 'low-light',
   # 4: 'noisy', 5: 'raindrop', 6: 'rainy', 7: 'shadowed', 8: 'snowy', 9: 'uncompleted'
   clip_better: lower
@@ -25,17 +26,15 @@ colabator:
 datasets:
   train:
     name: TrainSet
-    type: SemiHazeOnlineDataset
+    type: SemiDataset
     dataroot_gt: # syn gt image set
-    dataroot_depth: # syn lq image set
+    dataroot_lq: # syn lq image set
     dataroot_real: # real lq image set
-    beta_range: [ 0.2, 1.7 ] #[ 0.15, 1.7 ]
-    A_range: [ 0.25, 1.0 ]
-    color_p: 1.0
-    color_range: [ -0.025, 0.025 ]
+
     use_resize_crop: true
-    use_flip: true
+    use_hflip: true
     use_rot: false
+
     filename_tmpl: '{}'
     io_backend:
       type: disk

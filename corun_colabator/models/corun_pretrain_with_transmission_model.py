@@ -68,15 +68,20 @@ class CORUN_Pretrain_with_Transmission(SRModel):
                 self.mixing_augmentation = Mixing_Augment(mixup_beta, use_identity, self.device)
 
         if self.is_train:
-            self.init_clip()
+            if self.opt['clip_plugin'].get('use_clip', False) or self.opt['train'].get('use_clip_loss', False):
+                self.init_clip()
 
     def init_clip(self):
-        checkpoint = './daclip_ViT-B-32.pt'
-        self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained('daclip_ViT-B-32',
+        clip_model_type = self.opt['clip_plugin'].get('clip_model_type', None)
+        checkpoint = self.opt['clip_plugin'].get('pretrained_clip_weight', None)
+        tokenizer_type = self.opt['clip_plugin'].get('tokenizer_type', None)
+        self.clip_better = self.opt['clip_plugin'].get('clip_better', None)
+        self.degradation_type = self.opt['clip_plugin'].get('degradation_type', None)
+        self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained(clip_model_type,
                                                                                        pretrained=checkpoint)
         self.clip_model = self.model_to_device(self.clip_model)
         self.clip_model.eval()
-        self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
+        self.tokenizer = open_clip.get_tokenizer(tokenizer_type)
         degradations = ['motion-blurry', 'hazy', 'jpeg-compressed', 'low-light', 'noisy', 'raindrop', 'rainy',
                         'shadowed', 'snowy', 'uncompleted']
         text = self.tokenizer(degradations)
@@ -138,16 +143,18 @@ class CORUN_Pretrain_with_Transmission(SRModel):
             _, _, h, w = self.output.size()
             self.output = self.output[:, :, 0:h - mod_pad_h * scale, 0:w - mod_pad_w * scale]
 
-
     def get_clip_hazy_rate(self, img):
         image = self.clip_preprocess(img)
-        with torch.no_grad(), torch.cuda.amp.autocast():
-            _, degra_features = self.clip_model.module.encode_image(image, control=True)
-            # image_features /= image_features.norm(dim=-1, keepdim=True)
-            degra_features /= degra_features.norm(dim=-1, keepdim=True)
-            text_probs = (100.0 * degra_features @ self.text_features.T).softmax(dim=-1)
-            probs = text_probs[:,1]
-            return probs
+        sum_probs = 0
+        for degradation in self.degradation_type:
+            with torch.no_grad(), torch.cuda.amp.autocast():
+                _, degra_features = self.clip_model.module.encode_image(image, control=True)
+                # image_features /= image_features.norm(dim=-1, keepdim=True)
+                degra_features /= degra_features.norm(dim=-1, keepdim=True)
+                text_probs = (100.0 * degra_features @ self.text_features.T).softmax(dim=-1)
+                probs = text_probs[:, degradation]
+                sum_probs = sum_probs + probs
+        return sum_probs
 
     def get_batch_avg_hazy_rate(self, imgs):
         sum_rate = self.get_clip_hazy_rate(imgs)

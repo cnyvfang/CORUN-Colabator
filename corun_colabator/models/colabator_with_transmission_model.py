@@ -19,8 +19,6 @@ import time
 from tqdm import tqdm
 import corun_colabator.archs.open_clip as open_clip
 import corun_colabator.archs.memory_bank as memory_bank
-import torchvision.transforms as TF
-from torch.distributed.algorithms.join import Join
 
 class Mixing_Augment:
     def __init__(self, mixup_beta, use_identity, device):
@@ -71,6 +69,7 @@ class Colabator_with_Transmission(SRModel):
                 self.mixing_augmentation = Mixing_Augment(mixup_beta, use_identity, self.device)
 
         if self.is_train:
+            self.block_size = self.opt['colabator'].get('block_size', None)
             if self.opt['colabator'].get('use_clip', False) or self.opt['train'].get('use_clip_loss', False):
                 self.init_clip()
             if self.opt['colabator'].get('use_nr_iqa', False):
@@ -78,14 +77,12 @@ class Colabator_with_Transmission(SRModel):
             self.init_mmb()
 
     def init_clip(self):
-        clip_model_type = self.opt['colabator'].get('clip_model_name', None)
+        clip_model_type = self.opt['colabator'].get('clip_model_type', None)
         checkpoint = self.opt['colabator'].get('pretrained_clip_weight', None)
         tokenizer_type = self.opt['colabator'].get('tokenizer_type', None)
         self.clip_better = self.opt['colabator'].get('clip_better', None)
         self.degradation_type = self.opt['colabator'].get('degradation_type', None)
-        self.block_size = self.opt['colabator'].get('block_size', None)
-        self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained(clip_model_type,
-                                                                                       pretrained=checkpoint)
+        self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained(clip_model_type,                                                               pretrained=checkpoint)
         self.clip_model = self.model_to_device(self.clip_model)
         self.clip_model.eval()
         self.tokenizer = open_clip.get_tokenizer(tokenizer_type)
@@ -235,7 +232,7 @@ class Colabator_with_Transmission(SRModel):
                 teacher_nr_iqa_score = (self.nr_iqa(teacher_tar) - self.nr_iqa_scale[0]) / (
                             self.nr_iqa_scale[1] - self.nr_iqa_scale[0])
                 # unblock image
-                if self.nr_iqa_scale is not 'sigmoid':
+                if self.nr_iqa_scale != 'sigmoid':
                     teacher_nr_iqa_score_mask = (self.unblock_image(teacher_nr_iqa_score_sequence,
                                                                     (self.block_size, self.block_size),
                                                                     original_shape) - self.nr_iqa_scale[0]) / (
@@ -244,7 +241,7 @@ class Colabator_with_Transmission(SRModel):
                     teacher_nr_iqa_score_mask = torch.sigmoid(self.unblock_image(teacher_nr_iqa_score_sequence,
                                                                                  (self.block_size, self.block_size),
                                                                                  original_shape))
-                if self.nr_iqa_better is 'higher':
+                if self.nr_iqa_better == 'higher':
                     teacher_nr_iqa_score_mask = teacher_nr_iqa_score_mask
                     teacher_nr_iqa_score = teacher_nr_iqa_score
                 else:
@@ -263,7 +260,7 @@ class Colabator_with_Transmission(SRModel):
                 teacher_score_mask = len(self.degradation_type) - self.unblock_image(teacher_score_sequence,
                                                                                      (self.block_size, self.block_size),
                                                                                      original_shape)
-                if self.clip_better is 'higher':
+                if self.clip_better == 'higher':
                     teacher_score = teacher_score
                     teacher_score_mask = teacher_score_mask
                 else:
