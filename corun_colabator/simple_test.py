@@ -11,25 +11,25 @@ from tqdm import tqdm
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-import deblur_utils as utils
-
-from natsort import natsorted
+import cv2
 from glob import glob
-from kdsrgan.archs.TA_arch import BlindSR_TA
+from corun_colabator.archs.corun_arch import CORUN
 from skimage import img_as_ubyte
 from pdb import set_trace as stx
 
-parser = argparse.ArgumentParser(description='Single Image Motion Deblurring using Restormer')
+parser = argparse.ArgumentParser(description='Single Image Dehazing using CORUN')
 
-parser.add_argument('--input_dir', default='/mnt/bn/xiabinsr/datasets/restormer/deblur', type=str, help='Directory of validation images')
+parser.add_argument('--input_dir', default='/home/nfs/fcy/Datasets/Dehaze/RTTS/JPEGImages', type=str, help='Directory of validation images')
 parser.add_argument('--result_dir', default='./results/', type=str, help='Directory for results')
-parser.add_argument('--weights', default='./experiments/train_KDSRNetT/models/net_g_296000.pth', type=str, help='Path to weights')
-parser.add_argument('--dataset', default='HIDE', type=str, help='Test Dataset') # ['GoPro', 'HIDE', 'RealBlur_J', 'RealBlur_R']
+parser.add_argument('--weights', default='./pretrained_weights/15k.pth', type=str, help='Path to weights')
+parser.add_argument('--dataset', default='RTTS', type=str, help='Test Dataset')
+parser.add_argument('--opt', default='../options/test_corun.yml', type=str, help='options')
+
 
 args = parser.parse_args()
 
 ####### Load yaml #######
-yaml_file = 'CORUN_Options/train_kdsrnet_x4TA.yml'
+yaml_file = args.opt
 import yaml
 
 try:
@@ -42,10 +42,10 @@ x = yaml.load(open(yaml_file, mode='r'), Loader=Loader)
 s = x['network_g'].pop('type')
 ##########################
 
-model_restoration = BlindSR_TA(**x['network_g'])
+model_restoration = CORUN(**x['network_g'])
 
-checkpoint = torch.load(args.weights)
-model_restoration.load_state_dict(checkpoint['params'])
+checkpoint = torch.load(args.weights, weights_only=True)
+model_restoration.load_state_dict(checkpoint['params_ema'])
 print("===>Testing using weights: ",args.weights)
 model_restoration.cuda()
 model_restoration = nn.DataParallel(model_restoration)
@@ -57,23 +57,17 @@ dataset = args.dataset
 result_dir  = os.path.join(args.result_dir, dataset)
 os.makedirs(result_dir, exist_ok=True)
 
-inp_dir = os.path.join(args.input_dir, 'test', dataset, 'input')
-gt_dir = os.path.join(args.input_dir, 'test', dataset, 'target')
-inp_files = natsorted(glob(os.path.join(inp_dir, '*.png')) + glob(os.path.join(inp_dir, '*.jpg')))
-gt_files = natsorted(glob(os.path.join(gt_dir, '*.png')) + glob(os.path.join(gt_dir, '*.jpg')))
+inp_dir = os.path.join(args.input_dir)
+inp_files = glob(os.path.join(inp_dir, '*.png')) + glob(os.path.join(inp_dir, '*.jpg'))
 
 with torch.no_grad():
-    for inp_file_,gt_file_ in tqdm(zip(inp_files,gt_files)):
+    for inp_file_ in tqdm(inp_files):
         torch.cuda.ipc_collect()
         torch.cuda.empty_cache()
 
-        img = np.float32(utils.load_img(inp_file_))/255.
+        img = np.float32(cv2.imread(inp_file_))/255.
         img = torch.from_numpy(img).permute(2,0,1)
         input_ = img.unsqueeze(0).cuda()
-
-        img = np.float32(utils.load_img(gt_file_))/255.
-        img = torch.from_numpy(img).permute(2,0,1)
-        gt_ = img.unsqueeze(0).cuda()
 
         # Padding in case images are not multiples of 8
         h,w = input_.shape[2], input_.shape[3]
@@ -82,13 +76,11 @@ with torch.no_grad():
         padw = W-w if w%factor!=0 else 0
         input_ = F.pad(input_, (0,padw,0,padh), 'reflect')
 
-        gt_ = F.pad(gt_, (0,padw,0,padh), 'reflect')
-
-        restored = model_restoration(input_,gt_)
+        restored = model_restoration(input_)[0]
 
         # Unpad images to original dimensions
         restored = restored[:,:,:h,:w]
 
         restored = torch.clamp(restored,0,1).cpu().detach().permute(0, 2, 3, 1).squeeze(0).numpy()
 
-        utils.save_img((os.path.join(result_dir, os.path.splitext(os.path.split(inp_file_)[-1])[0]+'.png')), img_as_ubyte(restored))
+        cv2.imwrite((os.path.join(result_dir, os.path.splitext(os.path.split(inp_file_)[-1])[0]+'.png')), img_as_ubyte(restored))

@@ -1,0 +1,83 @@
+# general settings
+name: CORUN
+model_type: Colabator
+scale: 1
+num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
+manual_seed: 0
+
+
+# dataset and data loader settings
+datasets:
+  # Uncomment these for validation
+  val_0:
+    name: RTTS
+    type: SingleDataset
+    dataroot_lq:  # test lq image set
+    # data loader
+    dataset_enlarge_ratio: 1
+    prefetch_mode: ~
+    num_worker_per_gpu: 12
+    gt_size: 288
+    io_backend:
+      type: disk
+
+###########################################
+# this is a sample
+# you can modify this part for your network
+network_g:
+  type: CORUN
+  depth: 4
+###########################################
+
+# path
+path:
+  pretrain_network_g: # pretrained weight
+  pretrain_network_memory_bank: ~
+  param_key_g: params_ema
+  strict_load_g: true
+  resume_state: ~
+
+# training settings
+
+val:
+  pbar: true
+  val_freq: !!float 5000
+  save_img: true
+  window_size: 16
+  save_source: true
+  save_all_stages: false
+
+  metrics:
+    brisque:
+      type: calculate_brisque
+      crop_border: 0
+      better: lower
+    nima:
+      type: calculate_nima
+      crop_border: 0
+      better: higher
+
+#    only enable when test gt image set is exist
+#    ssim:
+#      type: calculate_ssim
+#      crop_border: 0
+#      better: higher
+#    psnr:
+#      type: calculate_psnr
+#      crop_border: 0
+#      better: higher
+
+
+# logging settings
+logger:
+  print_freq: 500
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: true
+  wandb:
+    project: ~
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500

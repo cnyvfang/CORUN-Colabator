@@ -1,3 +1,4 @@
+# <p align=center><img src="figs/logo.png" width="300px"> </p>
 # <p align=center> `CORUN 🏃 Colabator 🏃🏻‍♂️` </p>
 <b><p align=center> <a href='https://arxiv.org/pdf/2406.07966'><img src='https://img.shields.io/badge/ArXiv-2406.07966-red'></a>
   NIPS2024 Spotlight ✨</p></b>
@@ -75,14 +76,24 @@ python setup.py develop
 python init_modules.py
 ```
 
-Download the pre-trained da-clip weights and put it in `./pretrained_weights/`. You can download the daclip weights we used from [Google Drive](https://drive.google.com/file/d/1bIlKYouxwizQXbud7SXd5F5oOyoHFH4x/view?usp=sharing). You can also choose other type of clip models and corresponding weights from openclip, if you do this, don't forget to modify your options.
+Download the pre-trained da-clip weights and place it in `./pretrained_weights/`. You can download the daclip weights we used from [Google Drive](https://drive.google.com/file/d/1bIlKYouxwizQXbud7SXd5F5oOyoHFH4x/view?usp=sharing). You can also choose other type of clip models and corresponding weights from openclip, if you do this, don't forget to modify your options.
 
 
 ## 🏃 Train
 TBD
 
 ## 🏃‍♂️ Test
-TBD
+Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [Google Drive]()
+
+### Inference
+```bash
+
+```
+
+### Evalutation
+```bash
+
+```
 
 ## 🔍 Results
 
