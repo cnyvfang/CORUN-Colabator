@@ -60,7 +60,7 @@ We will finalize all the code before the conference and upload the corresponding
 - **RTTS** dataset can be downloaded from [Dropbox](https://utexas.app.box.com/s/2yekra41udg9rgyzi3ysi513cps621qz).
 - **URHI** dataset can be downloaded from [Dropbox](https://utexas.app.box.com/s/7hu094vwkw0cwowv5wijwv9pure2fvup).
 - **Duplicate Removed URHI** can be downloaded from TBD
-- **RIDCP500** can be downloaded from TBD
+- **RIDCP500** can be downloaded from [RIDCP's Repo](https://github.com/RQ-Wu/RIDCP_dehazing)
 
 ### Init Conda Environment and Clone Repo
 ```bash
