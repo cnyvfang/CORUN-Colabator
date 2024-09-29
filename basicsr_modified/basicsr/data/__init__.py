@@ -23,7 +23,7 @@ _dataset_modules = [importlib.import_module(f'basicsr.data.{file_name}') for fil
 
 
 def build_dataset(dataset_opt):
-    """Build dataset from CORUN_Options.
+    """Build dataset from options.
 
     Args:
         dataset_opt (dict): Configuration for dataset. It must contain:
@@ -42,7 +42,7 @@ def build_dataloader(dataset, dataset_opt, num_gpu=1, dist=False, sampler=None, 
 
     Args:
         dataset (torch.utils.data.Dataset): Dataset.
-        dataset_opt (dict): Dataset CORUN_Options. It contains the following keys:
+        dataset_opt (dict): Dataset options. It contains the following keys:
             phase (str): 'train' or 'val'.
             num_worker_per_gpu (int): Number of workers for each GPU.
             batch_size_per_gpu (int): Training batch size for each GPU.

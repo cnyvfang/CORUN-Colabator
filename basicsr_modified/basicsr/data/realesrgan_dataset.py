@@ -30,7 +30,7 @@ class RealESRGANDataset(data.Dataset):
             io_backend (dict): IO backend type and other kwarg.
             use_hflip (bool): Use horizontal flips.
             use_rot (bool): Use rotation (use vertical flip and transposing h and w for implementation).
-            Please see more CORUN_Options in the codes.
+            Please see more options in the codes.
     """
 
     def __init__(self, opt):

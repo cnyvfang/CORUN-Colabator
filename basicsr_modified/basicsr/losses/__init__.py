@@ -17,7 +17,7 @@ _model_modules = [importlib.import_module(f'basicsr.losses.{file_name}') for fil
 
 
 def build_loss(opt):
-    """Build loss from CORUN_Options.
+    """Build loss from options.
 
     Args:
         opt (dict): Configuration. It must contain:

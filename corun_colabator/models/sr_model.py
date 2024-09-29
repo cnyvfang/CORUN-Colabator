@@ -419,12 +419,12 @@ class SRModel(BaseModel):
 
                 self._log_validation_metric_values(current_iter, dataset_name, tb_logger)
 
-    def get_current_visuals(self, current_iter):
+    def get_current_visuals(self):
         out_dict = OrderedDict()
         out_dict['lq'] = self.lq.detach().cpu()
         out_dict['result'] = self.output.detach().cpu()
-        # if hasattr(self, 'gt'):
-        out_dict['gt'] = self.gt.detach().cpu()
+        if hasattr(self, 'gt'):
+            out_dict['gt'] = self.gt.detach().cpu()
         return out_dict
 
     def _log_validation_metric_values(self, current_iter, dataset_name, tb_logger):

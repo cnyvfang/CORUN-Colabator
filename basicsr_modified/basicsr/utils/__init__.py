@@ -42,6 +42,6 @@ __all__ = [
     # img_process_util
     'USMSharp',
     'usm_sharp',
-    # CORUN_Options
+    # options
     'yaml_load'
 ]

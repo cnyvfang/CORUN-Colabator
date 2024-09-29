@@ -89,7 +89,7 @@ def load_resume_state(opt):
 
 
 def train_pipeline(root_path):
-    # parse CORUN_Options, set distributed setting, set random seed
+    # parse options, set distributed setting, set random seed
     opt, args = parse_options(root_path, is_train=True)
     opt['root_path'] = root_path
 

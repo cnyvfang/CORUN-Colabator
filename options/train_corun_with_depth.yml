@@ -40,26 +40,18 @@ datasets:
     batch_size_per_gpu: 2
     mini_batch_sizes: [ 2 ]             # Batch size per gpu
     iters: [ 30000 ]
-    gt_size: 288   # Max patch size for progressive training
-    gt_sizes: [ 288 ]  # Patch sizes for progressive training.
+    gt_size: 288 #288   # Max patch size for progressive training
+    gt_sizes: [ 288 ] # 288  # Patch sizes for progressive training.
 
     # data loader
     use_shuffle: true
-    dataset_enlarge_ratio: 100
+    dataset_enlarge_ratio: 10
     prefetch_mode: ~
 
-#  val:
-#    name: RTTS
-#    type: SingleDataset
-#    dataroot_lq: /data/fcy/Datasets/Dehaze/RTTS
-#    gt_size: 288
-#    io_backend:
-#      type: disk
-
   val:
-    name: RTTS_Lite
+    name: RTTS
     type: SingleDataset
-    dataroot_lq: /home/nfs/fcy/Datasets/Dehaze/RTTS_Lite
+    dataroot_lq: /data/fcy/Datasets/Dehaze/RTTS
     gt_size: 288
     io_backend:
       type: disk
@@ -127,6 +119,8 @@ val:
   pbar: true
   val_freq: !!float 5000
   save_img: true
+  save_source: false
+  save_all_stages: ture
   window_size: 16
 
   metrics:

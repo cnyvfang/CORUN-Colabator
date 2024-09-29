@@ -17,7 +17,7 @@ class SRVGGNetCompact(nn.Module):
         num_feat (int): Channel number of intermediate features. Default: 64.
         num_conv (int): Number of convolution layers in the body network. Default: 16.
         upscale (int): Upsampling factor. Default: 4.
-        act_type (str): Activation type, CORUN_Options: 'relu', 'prelu', 'leakyrelu'. Default: prelu.
+        act_type (str): Activation type, options: 'relu', 'prelu', 'leakyrelu'. Default: prelu.
     """
 
     def __init__(self, num_in_ch=3, num_out_ch=3, num_feat=64, num_conv=16, upscale=4, act_type='prelu'):

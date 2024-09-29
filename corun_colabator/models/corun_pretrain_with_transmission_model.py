@@ -94,6 +94,13 @@ class CORUN_Pretrain_with_Transmission(SRModel):
 
 
     def feed_data(self, data):
+        try:
+            del self.lq
+            del self.gt
+            del self.transmission
+        except:
+            pass
+
         self.lq = data['lq'].to(self.device)
         if 'gt' in data:
             self.gt = data['gt'].to(self.device)
@@ -119,10 +126,8 @@ class CORUN_Pretrain_with_Transmission(SRModel):
         window_size = self.opt['val'].get('window_size', 0)
         if window_size:
             lq, mod_pad_h, mod_pad_w = self.pad_test(self.lq,window_size)
-            gt, gt_mod_pad_h, gt_mod_pad_w = self.pad_test(self.gt,window_size)
         else:
             lq = self.lq
-            gt = self.gt
 
         if hasattr(self, 'net_g_ema'):
             self.net_g_ema.eval()
@@ -142,6 +147,7 @@ class CORUN_Pretrain_with_Transmission(SRModel):
             scale = self.opt.get('scale', 1)
             _, _, h, w = self.output.size()
             self.output = self.output[:, :, 0:h - mod_pad_h * scale, 0:w - mod_pad_w * scale]
+
 
     def get_clip_hazy_rate(self, img):
         image = self.clip_preprocess(img)
@@ -207,11 +213,10 @@ class CORUN_Pretrain_with_Transmission(SRModel):
             self.model_ema(decay=self.ema_decay)
 
     def save_all_stages_img(self, img_name, current_iter):
-
         if hasattr(self, 'gt'):
-            output = torch.cat([self.lq, self.output, self.gt], dim=2)
+            output = torch.cat([self.lq, self.output, self.gt], dim=3)
         else:
-            output = torch.cat([self.lq, self.output], dim=2)
+            output = torch.cat([self.lq, self.output], dim=3)
 
         output_transmissions = self.output_transmissions[::-1]
         step_images = self.step_images[::-1]
@@ -222,10 +227,9 @@ class CORUN_Pretrain_with_Transmission(SRModel):
         recon_image = recon_images[0]
 
         for t in range(1, len(self.outputs)):
-            step_image = torch.cat((step_image, step_images[t]), 2)
-            output_transmission = torch.cat((output_transmission, output_transmissions[t]), 2)
-            recon_image = torch.cat((recon_image, recon_images[t]), 2)
-
+            step_image = torch.cat((step_image, step_images[t]), 3)
+            output_transmission = torch.cat((output_transmission, output_transmissions[t]), 3)
+            recon_image = torch.cat((recon_image, recon_images[t]), 3)
 
         # save image
         save_img_path = osp.join(self.opt['path']['visualization'], img_name,
@@ -245,10 +249,13 @@ class CORUN_Pretrain_with_Transmission(SRModel):
         step_img = step_image.detach().cpu()
         recon_img = recon_image.detach().cpu()
 
-        gt_img = self.gt.detach().cpu()
+        if hasattr(self, 'gt'):
+            gt_img = self.gt.detach().cpu()
+            imwrite(tensor2img(gt_img), save_gt_path)
+            del gt_img
+
         imwrite(tensor2img(output), save_img_path)
         imwrite(tensor2img(output_transmission),save_trans_path)
-        imwrite(tensor2img(gt_img), save_gt_path)
         imwrite(tensor2img(recon_img), save_recon_path)
         imwrite(tensor2img(step_img), save_step_path)
 
@@ -256,13 +263,14 @@ class CORUN_Pretrain_with_Transmission(SRModel):
         del output_transmission
         del step_img
         del recon_img
-        del gt_img
+
 
     def nondist_validation(self, dataloader, current_iter, tb_logger, save_img):
         dataset_name = dataloader.dataset.opt['name']
         with_metrics = self.opt['val'].get('metrics') is not None
         use_pbar = self.opt['val'].get('pbar', False)
         save_source_img = self.opt['val'].get('save_source', False)
+        save_all_stages = self.opt['val'].get('save_all_stages', False)
 
         if with_metrics:
             if not hasattr(self, 'metric_results'):  # only execute in the first run
@@ -277,12 +285,15 @@ class CORUN_Pretrain_with_Transmission(SRModel):
         if use_pbar:
             pbar = tqdm(total=len(dataloader), unit='image')
 
+        nima = pyiqa.create_metric('nima')
+        brisque = pyiqa.create_metric('brisque')
+
         for idx, val_data in enumerate(dataloader):
             img_name = osp.splitext(osp.basename(val_data['lq_path'][0]))[0]
             self.feed_data(val_data)
             self.test()
 
-            if save_img and self.opt['is_train']:
+            if save_all_stages:
                 self.save_all_stages_img(img_name, current_iter)
 
             visuals = self.get_current_visuals()
@@ -297,6 +308,9 @@ class CORUN_Pretrain_with_Transmission(SRModel):
                 metric_data['img2'] = gt_img
                 del self.gt
 
+            metric_data['nima'] = nima
+            metric_data['brisque'] = brisque
+
             # tentative for out of GPU memory
             del self.lq
             del self.output
@@ -307,22 +321,24 @@ class CORUN_Pretrain_with_Transmission(SRModel):
 
             torch.cuda.empty_cache()
 
-            if save_img:
-                if self.opt['is_train']:
-                    save_img_path = osp.join(self.opt['path']['visualization'], img_name,
+            if self.opt['is_train']:
+                save_img_path = osp.join(self.opt['path']['visualization'], img_name,
                                              f'{img_name}_{current_iter}.png')
+                if save_source_img:
                     save_lq_path = osp.join(self.opt['path']['visualization'], img_name,
-                                            f'{img_name}_lq.png')
-                else:
-                    save_img_path = osp.join(self.opt['path']['visualization'], dataset_name,
+                                                f'{img_name}_lq.png')
+            else:
+                save_img_path = osp.join(self.opt['path']['visualization'], dataset_name,
                                                  f'{img_name}.png')
-                    if save_source_img:
-                            save_lq_path = osp.join(self.opt['path']['visualization'], dataset_name,
+                if save_source_img:
+                        save_lq_path = osp.join(self.opt['path']['visualization'], dataset_name,
                                                 f'{img_name}_lq.png')
 
-                imwrite(sr_img, save_img_path)
-                if save_source_img:
-                    imwrite(lq_img, save_lq_path)
+            imwrite(sr_img, save_img_path)
+            if save_source_img:
+                imwrite(lq_img, save_lq_path)
+
+            metric_data['img_path'] = save_img_path
 
 
             if with_metrics:
@@ -335,10 +351,13 @@ class CORUN_Pretrain_with_Transmission(SRModel):
         if use_pbar:
             pbar.close()
 
+        del nima
+        del brisque
+        torch.cuda.empty_cache()
+
         if with_metrics:
             for metric in self.metric_results.keys():
                 self.metric_results[metric] /= (idx + 1)
-                # update the best metric result
                 self._update_best_metric_result(dataset_name, metric, self.metric_results[metric], current_iter)
 
             self._log_validation_metric_values(current_iter, dataset_name, tb_logger)

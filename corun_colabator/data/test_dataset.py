@@ -93,13 +93,6 @@ class SingleDataset(data.Dataset):
 
         gt_size = self.opt['gt_size']
 
-        # if self.opt['phase'] == 'train':
-        #     gt_size = self.opt['gt_size']
-        #     # random crop
-        #     img_lq = solo_random_crop(img_lq, gt_size, scale)
-        #     # flip, rotation
-        #     img_lq = augment([img_lq], self.opt['use_hflip'], self.opt['use_rot'])
-
         h, w, _ = img_lq.shape
         if h > 512 or w > 512:
             if h > w:

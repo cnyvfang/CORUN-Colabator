@@ -52,7 +52,7 @@ def yaml_load(f):
 
 
 def dict2str(opt, indent_level=1):
-    """dict to string for printing CORUN_Options.
+    """dict to string for printing options.
 
     Args:
         opt (dict): Option dict.
@@ -129,7 +129,7 @@ def parse_options(root_path, is_train=True):
         opt['manual_seed'] = seed
     set_random_seed(seed + opt['rank'])
 
-    # force to update yml CORUN_Options
+    # force to update yml options
     if args.force_yml is not None:
         for entry in args.force_yml:
             # now do not support creating new keys
@@ -182,7 +182,7 @@ def parse_options(root_path, is_train=True):
         opt['path']['log'] = experiments_root
         opt['path']['visualization'] = osp.join(experiments_root, 'visualization')
 
-        # change some CORUN_Options for debug mode
+        # change some options for debug mode
         if 'debug' in opt['name']:
             if 'val' in opt:
                 opt['val']['val_freq'] = 8
