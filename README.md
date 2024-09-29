@@ -54,6 +54,14 @@ We will finalize all the code before the conference and upload the corresponding
 - [x] Release the preprint
 
 ## ⚙️ Dependencies and Installation
+
+### Datasets
+
+- **RTTS** dataset can be downloaded from [Dropbox](https://utexas.app.box.com/s/2yekra41udg9rgyzi3ysi513cps621qz).
+- **URHI** dataset can be downloaded from [Dropbox](https://utexas.app.box.com/s/7hu094vwkw0cwowv5wijwv9pure2fvup).
+- **Duplicate Removed URHI** can be downloaded from TBD
+- **RIDCP500** can be downloaded from TBD
+
 ### Init Conda Environment and Clone Repo
 ```bash
 git clone https://github.com/cnyvfang/CORUN-Colabator.git
@@ -85,21 +93,24 @@ Download the pre-trained da-clip weights and place it in `./pretrained_weights/`
 TBD
 
 ## 🏃‍♂️ Test
-Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [Google Drive]()
+Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [TBD]()
 
 ### Inference
+Modify the hyper-parameters in the tesh.sh before running the test script.
 ```bash
-
+sh test.sh
 ```
 
 ### Evalutation
+Caculate the NIMA and BRISQUE results.
 ```bash
-
+CUDA_VISIBLE_DEVICES=0 python evaluate.py --input_dir /path/to/results
 ```
 
 ## 🔍 Results
 
 We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and corresponding downstream tasks. More results can be found in the paper.
+**To quickly use the results of our experiments without manual inference or retraining, you can download all files dehazed/restored by our model from [TBD]().**
 
 <details>
 <summary>Quantitative Comparison (click to expand)</summary>
