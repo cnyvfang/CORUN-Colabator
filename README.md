@@ -95,7 +95,15 @@ Download the pre-trained da-clip weights and place it in `./pretrained_weights/`
 
 
 ## 🏃 Train
-TBD
+### Pretrain CORUN
+```bash
+
+```
+### Fine-tune CORUN with Colabator
+```bash
+
+```
+
 
 ## 🏃‍♂️ Test
 Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [TBD]()
