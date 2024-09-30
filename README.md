@@ -62,6 +62,11 @@ We will finalize all the code before the conference and upload the corresponding
 - **Duplicate Removed URHI** can be downloaded from [Google Drive](https://drive.google.com/file/d/1B29LsNhBWoRHDk2R_cc5nNqcn7c87sg-/view?usp=sharing)
 - **RIDCP500** can be downloaded from [RIDCP's Repo](https://github.com/RQ-Wu/RIDCP_dehazing)
 
+We provide two types of dataset loading functions for model training: one loads **clean images and corresponding depth maps to generate hazy images** using the RIDCP Data Generation Pipeline, and the other **directly loads paired clean and degraded images**. You can choose the appropriate method based on your dataset and task.
+
+**For the haze generation method**, we support reading the RIDCP500 dataset (where depth maps are stored as .npy files) as well as the OTS/ITS datasets (where depth maps are stored as .mat files). If your dataset contains paired clean images and depth maps, you can also use your own dataset. If you want to use this method but your dataset does not include depth maps, you can generate corresponding depth maps for your dataset using methods such as RA-Depth.
+**For the paired degraded-clean method**, you can use any paired degraded-clean image pairs for training and testing.
+
 ### Init Conda Environment and Clone Repo
 ```bash
 git clone https://github.com/cnyvfang/CORUN-Colabator.git
