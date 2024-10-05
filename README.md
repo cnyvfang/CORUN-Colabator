@@ -95,13 +95,14 @@ Download the pre-trained da-clip weights and place it in `./pretrained_weights/`
 
 
 ## 🏃 Train
+⚠️ **Please replace the dataset path in the options file with your own dataset path.**
 ### Pretrain CORUN
 ```bash
-
+sh options/train_corun_with_depth.sh
 ```
 ### Fine-tune CORUN with Colabator
 ```bash
-
+sh options/train_colabator_with_transmission.sh
 ```
 
 

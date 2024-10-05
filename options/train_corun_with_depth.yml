@@ -21,8 +21,8 @@ datasets:
   train:
     name: TrainSet
     type: HazeOnlineDataset
-    dataroot_gt: /home/nfs/fcy/Datasets/Dehaze/RIDCP/rgb_500
-    dataroot_depth: /home/nfs/fcy/Datasets/Dehaze/RIDCP/depth_500
+    dataroot_gt: /data/fcy/Datasets/Dehaze/RIDCP/rgb_500
+    dataroot_depth: /data/fcy/Datasets/Dehaze/RIDCP/depth_500
     beta_range: [ 0.2, 2.8 ]
     A_range: [ 0.5, 1.8 ]
     color_p: 1.0
@@ -40,8 +40,8 @@ datasets:
     batch_size_per_gpu: 2
     mini_batch_sizes: [ 2 ]             # Batch size per gpu
     iters: [ 30000 ]
-    gt_size: 64 #288   # Max patch size for progressive training
-    gt_sizes: [ 64 ] # 288  # Patch sizes for progressive training.
+    gt_size: 288 #288   # Max patch size for progressive training
+    gt_sizes: [ 288 ] # 288  # Patch sizes for progressive training.
 
     # data loader
     use_shuffle: true
@@ -51,8 +51,8 @@ datasets:
   val:
     name: RTTS
     type: SingleDataset
-    dataroot_lq: /home/nfs/fcy/Datasets/Dehaze/RTTS_Lite
-    gt_size: 288
+    dataroot_lq: /data/fcy/Datasets/Dehaze/RTTS
+    rescale_too_large_image: false
     io_backend:
       type: disk
 

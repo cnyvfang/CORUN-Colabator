@@ -49,6 +49,11 @@ class SingleDataset(data.Dataset):
         self.io_backend_opt = opt['io_backend']
         self.mean = opt['mean'] if 'mean' in opt else None
         self.std = opt['std'] if 'std' in opt else None
+        self.rescale_too_large_image = self.opt['rescale_too_large_image'] if 'rescale_too_large_image' in self.opt else False
+        print_state = 0
+        if print_state < self.opt['num_worker_per_gpu'] and self.rescale_too_large_image:
+            print_state("RESCALE TOO LARGE IMAGE TO SMALL IMAGE!!!!!")
+            print_state += 1
 
         self.lq_folder = opt['dataroot_lq']
         if 'filename_tmpl' in opt:
@@ -91,20 +96,20 @@ class SingleDataset(data.Dataset):
         except:
             raise Exception("lq path {} not working".format(lq_path))
 
-        gt_size = self.opt['gt_size']
+        if self.rescale_too_large_image:
+            h, w, _ = img_lq.shape
+            if h > 512 or w > 512:
+                if h > w:
+                    w = int(w * 512 / h)
+                    h = 512
+                else:
+                    h = int(h * 512 / w)
+                    w = 512
 
-        h, w, _ = img_lq.shape
-        if h > 512 or w > 512:
-            if h > w:
-                w = int(w * 512 / h)
-                h = 512
-            else:
-                h = int(h * 512 / w)
-                w = 512
+            # resize numpy image
+            img_lq = cv2.resize(img_lq, (w, h),
+                                 interpolation=cv2.INTER_CUBIC)
 
-        # resize numpy image
-        img_lq = cv2.resize(img_lq, (w, h),
-                             interpolation=cv2.INTER_CUBIC)
 
 
         # BGR to RGB, HWC to CHW, numpy to tensor

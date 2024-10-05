@@ -196,10 +196,9 @@ class Colabator(SRModel):
         window_size = self.opt['val'].get('window_size', 0)
         if window_size:
             lq, mod_pad_h, mod_pad_w = self.pad_test(self.lq,window_size)
-            gt, gt_mod_pad_h, gt_mod_pad_w = self.pad_test(self.gt,window_size)
+
         else:
             lq = self.lq
-            gt = self.gt
 
         # if hasattr(self, 'net_g_ema'):
         if hasattr(self, 'net_g_ema'):

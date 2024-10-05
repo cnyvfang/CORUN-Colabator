@@ -10,7 +10,7 @@ manual_seed: 0
 datasets:
   # Uncomment these for validation
   val_0:
-    name: RTTS
+    name: DATASET_NAME
     type: TestDataset
     dataroot_lq: # test lq image set
     dataroot_gt: # test gt image set or same as test lq image set
@@ -18,9 +18,22 @@ datasets:
     dataset_enlarge_ratio: 1
     prefetch_mode: ~
     num_worker_per_gpu: 12
-    gt_size: 256
     io_backend:
       type: disk
+
+#  val_0:
+#    name: RTTS
+#    type: SingleDataset
+#    dataroot_lq:  # test lq image set
+#    # data loader
+#    dataset_enlarge_ratio: 1
+#    rescale_too_large_image: false
+#    prefetch_mode: ~
+#    num_worker_per_gpu: 12
+#    io_backend:
+#      type: disk
+
+
 
 ###########################################
 # this is a sample

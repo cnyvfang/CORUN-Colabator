@@ -339,6 +339,9 @@ class CORUN_Pretrain_with_Transmission(SRModel):
                 imwrite(lq_img, save_lq_path)
 
             metric_data['img_path'] = save_img_path
+            metric_data['img'] = sr_img
+            if 'gt' in visuals:
+                metric_data['img2'] = gt_img
 
 
             if with_metrics:

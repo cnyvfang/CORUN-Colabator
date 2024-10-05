@@ -60,7 +60,6 @@ datasets:
     type: TestDataset
     dataroot_lq: # test lq image set
     dataroot_gt: # test gt image set or same as test lq image set
-    gt_size: 256
     num_worker_per_gpu: 5
     io_backend:
       type: disk

@@ -456,7 +456,7 @@ class ContrastPerceptualLoss(nn.Module):
                 if self.criterion_type == 'fro':
                     percep_loss += torch.norm(x_features[k] - gt_features[k], p='fro') * self.layer_weights[k]
                 else:
-                    percep_loss += (self.criterion(x_features[k], gt_features[k])/self.criterion(x_features[k],ng_features[k])) * self.layer_weights[k]
+                    percep_loss += (self.criterion(x_features[k], gt_features[k])/self.criterion(x_features[k], ng_features[k])) * self.layer_weights[k]
             percep_loss *= self.perceptual_weight
         else:
             percep_loss = None

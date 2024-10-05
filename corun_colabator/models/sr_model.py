@@ -351,19 +351,22 @@ class SRModel(BaseModel):
                 self.feed_data(val_data)
                 self.test()
 
-                visuals = self.get_current_visuals(current_iter)
+                visuals = self.get_current_visuals()
 
                 sr_img = tensor2img([visuals['result']])
                 lq_img = tensor2img([visuals['lq']])
-                gt_img = tensor2img([visuals['gt']])
-
+                if 'gt' in visuals:
+                    gt_img = tensor2img([visuals['gt']])
+                    del self.gt
                 # tentative for out of GPU memory
 
-                del self.output_transmissions
-                del self.step_images
-                del self.recon_images
+                try:
+                    del self.output_transmissions
+                    del self.step_images
+                    del self.recon_images
+                except:
+                    pass
                 del self.lq
-                del self.gt
                 del self.output
                 del self.outputs
 
@@ -388,13 +391,17 @@ class SRModel(BaseModel):
                     imwrite(sr_img, save_img_path)
                     if save_source_img:
                         imwrite(lq_img, save_lq_path)
-                        imwrite(gt_img, save_gt_path)
+                        if 'gt' in visuals:
+                            imwrite(gt_img, save_gt_path)
 
                     metric_data['nima'] = nima
                     metric_data['brisque'] = brisque
-                    metric_data['img'] = save_img_path
-                    metric_data['img2'] = save_gt_path
-                    metric_data['lq'] = save_lq_path
+                    metric_data['img_path'] = save_img_path
+                    metric_data['img'] = sr_img
+                    if save_source_img:
+                        if 'gt' in visuals:
+                            metric_data['img2'] = gt_img
+                        metric_data['lq'] = save_lq_path
 
                 if with_metrics:
                     # calculate metrics

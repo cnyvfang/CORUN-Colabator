@@ -104,7 +104,7 @@ class Colabator_with_Transmission(SRModel):
         self.nr_iqa = self.model_to_device(self.nr_iqa).eval()
 
     def init_mmb(self):
-        self.memory_bank = memory_bank.Memory_bank_woT().to('cpu')
+        self.memory_bank = memory_bank.Memory_bank().to('cpu')
         memory_bank_path = self.opt['path'].get('pretrain_network_memory_bank', None)
         if memory_bank_path is not None:
             self.memory_bank.load_state_dict(torch.load(memory_bank_path))
@@ -241,10 +241,10 @@ class Colabator_with_Transmission(SRModel):
                     teacher_nr_iqa_score_mask = torch.sigmoid(self.unblock_image(teacher_nr_iqa_score_sequence,
                                                                                  (self.block_size, self.block_size),
                                                                                  original_shape))
-                if self.nr_iqa_better == 'higher':
+                if self.nr_iqa_better == 'higher': # if higher is better, then the score is higher, the mask is 1
                     teacher_nr_iqa_score_mask = teacher_nr_iqa_score_mask
                     teacher_nr_iqa_score = teacher_nr_iqa_score
-                else:
+                else: # if lower is better, then the score is lower, the mask is 1
                     teacher_nr_iqa_score_mask = 1 - teacher_nr_iqa_score_mask
                     teacher_nr_iqa_score = 1 - teacher_nr_iqa_score
             else:

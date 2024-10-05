@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 parser = argparse.ArgumentParser(description='Evaluate Image Quality')
 
-parser.add_argument('--input_dir', default='results/RTTS_10K', type=str, help='Directory of validation images')
+parser.add_argument('--input_dir', default='/Users/chengyufang/Downloads/Dehaze_Visualization/train_DASUM_RIDCP_MST_SAMPLE_AUG_BatchMore_AUGMORE_15k_with_mask/visualization/RTTS', type=str, help='Directory of validation images')
 
 args = parser.parse_args()
 

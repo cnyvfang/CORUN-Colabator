@@ -1,7 +1,7 @@
-name: NAME_OF_EXPERIMENT
-model_type: Colabator
+name: trainS2_CORUN_RIDCP500_30000
+model_type: Colabator_with_Transmission
 scale: 1
-num_gpu: auto
+num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
 manual_seed: 0
 
 colabator:
@@ -16,7 +16,7 @@ colabator:
   # 4: 'noisy', 5: 'raindrop', 6: 'rainy', 7: 'shadowed', 8: 'snowy', 9: 'uncompleted'
   clip_better: lower
 
-  nr_iqa_type: musiq
+  nr_iqa_type: musiq # you can choose any nr_iqa method from pyiqa model card.
   nr_iqa_better: higher # higher, lower
   nr_iqa_scale: [0,100] # scale or sigmoid
 
@@ -26,15 +26,17 @@ colabator:
 datasets:
   train:
     name: TrainSet
-    type: SemiDataset
-    dataroot_gt: # syn gt image set
-    dataroot_lq: # syn lq image set
-    dataroot_real: # real lq image set
-
+    type: SemiHazeOnlineDataset
+    dataroot_gt: /data/fcy/Datasets/Dehaze/RIDCP/rgb_500
+    dataroot_depth: /data/fcy/Datasets/Dehaze/RIDCP/depth_500
+    dataroot_real: /data/fcy/Datasets/Dehaze/UnannotatedHazyImages-cleaned
+    beta_range: [ 0.2, 2.8 ]
+    A_range: [ 0.25, 1.8 ]
+    color_p: 1.0
+    color_range: [ -0.025, 0.025 ]
     use_resize_crop: true
-    use_hflip: true
+    use_flip: true
     use_rot: false
-
     filename_tmpl: '{}'
     io_backend:
       type: disk
@@ -43,8 +45,8 @@ datasets:
     batch_size_per_gpu: 16
     mini_batch_sizes: [ 1 ]             # Batch size per gpu
     iters: [ 50000 ]
-    gt_size: 256   # Max patch size for progressive training
-    gt_sizes: [ 256 ]  # Patch sizes for progressive training.
+    gt_size: 288   # Max patch size for progressive training
+    gt_sizes: [ 288 ]  # Patch sizes for progressive training.
 
     # data loader
     use_shuffle: true
@@ -54,11 +56,10 @@ datasets:
 
   # Uncomment these for validation
   val:
-    name: Testset
-    type: TestDataset
-    dataroot_lq: # test lq image set
-    dataroot_gt: # test gt image set or same as test lq image set
-    num_worker_per_gpu: 5
+    name: RTTS
+    type: SingleDataset
+    dataroot_lq: /data/fcy/Datasets/Dehaze/RTTS
+    rescale_too_large_image: false
     io_backend:
       type: disk
 # network structures
@@ -67,22 +68,13 @@ datasets:
 # this is a sample
 # you can modify this part for your network
 network_g:
-  type: Restormer
-  inp_channels: 3
-  out_channels: 3
-  dim: 48
-  num_blocks: [4,6,6,8]
-  num_refinement_blocks: 4
-  heads: [1,2,4,8]
-  ffn_expansion_factor: 1.5
-  bias: False
-  LayerNorm_type: WithBias
-  dual_pixel_task: False
+  type: CORUN
+  depth: 4
 ###########################################
 
 # path
 path:
-  pretrain_network_g: # pretrained weight
+  pretrain_network_g: ./experiments/trainS1_CORUN_RIDCP500/models/net_g_30000.pth # pretrained weight
   pretrain_network_memory_bank: ~
   param_key_g: params_ema
   strict_load_g: true

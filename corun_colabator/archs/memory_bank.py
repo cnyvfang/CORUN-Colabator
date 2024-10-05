@@ -30,11 +30,11 @@ class Memory_bank(nn.Module):
         else:
             return None
 
-    def update(self, image_name, image, transmission, musiq, clip_score, mask=None):
+    def update(self, image_name, image, transmission, nriqa, clip_score, mask=None):
         if mask is not None:
-            self.dict.update({image_name: [image, transmission, musiq, clip_score, mask]})
+            self.dict.update({image_name: [image, transmission, nriqa, clip_score, mask]})
         else:
-            self.dict.update({image_name: [image, transmission, musiq, clip_score, None]})
+            self.dict.update({image_name: [image, transmission, nriqa, clip_score, None]})
 
     def save(self, path, current_iter):
         # mkdir path/current_iter
@@ -57,10 +57,10 @@ class Memory_bank(nn.Module):
             self.dict = pickle.load(f)
 
     @torch.no_grad()
-    def forward(self, image_name_list, image_list, transmission_list, musiq_list, clip_score_list, device, mask=None):
+    def forward(self, image_name_list, image_list, transmission_list, nriqa_list, clip_score_list, device, mask=None):
         pseudo_label = []
         pseudo_transmission = []
-        teacher_musiq = []
+        teacher_nriqa = []
         teacher_clip_score = []
         mask_stack = []
         for i in range(len(image_name_list)):
@@ -69,39 +69,39 @@ class Memory_bank(nn.Module):
             if temp_image_data is None:
                 pseudo_label.append(image_list[i])
                 pseudo_transmission.append(transmission_list[i])
-                teacher_musiq.append(musiq_list[i])
+                teacher_nriqa.append(nriqa_list[i])
                 teacher_clip_score.append(clip_score_list[i])
                 if mask is not None:
                     mask_stack.append(mask[i])
-                    self.update(image_name_list[i], image_list[i].detach().cpu().clone(), transmission_list[i].detach().cpu().clone(), musiq_list[i].detach().cpu().clone(), clip_score_list[i].detach().cpu().clone(), mask[i].detach().cpu().clone())
+                    self.update(image_name_list[i], image_list[i].detach().cpu().clone(), transmission_list[i].detach().cpu().clone(), nriqa_list[i].detach().cpu().clone(), clip_score_list[i].detach().cpu().clone(), mask[i].detach().cpu().clone())
                 else:
-                    self.update(image_name_list[i], image_list[i].detach().cpu().clone(), transmission_list[i].detach().cpu().clone(), musiq_list[i].detach().cpu().clone(), clip_score_list[i].detach().cpu().clone())
+                    self.update(image_name_list[i], image_list[i].detach().cpu().clone(), transmission_list[i].detach().cpu().clone(), nriqa_list[i].detach().cpu().clone(), clip_score_list[i].detach().cpu().clone())
             # update
             else:
-                temp_musiq = musiq_list[i].detach().cpu()
+                temp_nriqa = nriqa_list[i].detach().cpu()
                 temp_clip_score = clip_score_list[i].detach().cpu()
-                if temp_image_data[2] <= temp_musiq and temp_image_data[3] <= temp_clip_score:
+                if temp_image_data[2] <= temp_nriqa and temp_image_data[3] <= temp_clip_score:
                     pseudo_label.append(image_list[i].to(device))
                     pseudo_transmission.append(transmission_list[i].to(device))
-                    teacher_musiq.append(musiq_list[i].to(device))
+                    teacher_nriqa.append(nriqa_list[i].to(device))
                     teacher_clip_score.append(clip_score_list[i].to(device))
                     if mask is not None:
                         mask_stack.append(mask[i].to(device))
-                        self.update(image_name_list[i], image_list[i].detach().cpu().clone(), transmission_list[i].detach().cpu().clone(), temp_musiq.clone(), temp_clip_score.clone(), mask[i].detach().cpu().clone())
+                        self.update(image_name_list[i], image_list[i].detach().cpu().clone(), transmission_list[i].detach().cpu().clone(), temp_nriqa.clone(), temp_clip_score.clone(), mask[i].detach().cpu().clone())
                     else:
-                        self.update(image_name_list[i], image_list[i].detach().cpu().clone(), transmission_list[i].detach().cpu().clone(), temp_musiq.clone(), temp_clip_score.clone())
+                        self.update(image_name_list[i], image_list[i].detach().cpu().clone(), transmission_list[i].detach().cpu().clone(), temp_nriqa.clone(), temp_clip_score.clone())
                 else:
                     pseudo_label.append(temp_image_data[0].to(device))
                     pseudo_transmission.append(temp_image_data[1].to(device))
-                    teacher_musiq.append(temp_image_data[2].to(device))
+                    teacher_nriqa.append(temp_image_data[2].to(device))
                     teacher_clip_score.append(temp_image_data[3].to(device))
                     if mask is not None:
                         mask_stack.append(temp_image_data[4].to(device))
 
         if mask is not None:
-            return torch.stack(pseudo_label).detach(), torch.stack(pseudo_transmission).detach(), torch.stack(teacher_musiq).detach(), torch.stack(teacher_clip_score).detach(), torch.stack(mask_stack).detach()
+            return torch.stack(pseudo_label).detach(), torch.stack(pseudo_transmission).detach(), torch.stack(teacher_nriqa).detach(), torch.stack(teacher_clip_score).detach(), torch.stack(mask_stack).detach()
         else:
-            return torch.stack(pseudo_label).detach(), torch.stack(pseudo_transmission).detach(), torch.stack(teacher_musiq).detach(), torch.stack(teacher_clip_score).detach()
+            return torch.stack(pseudo_label).detach(), torch.stack(pseudo_transmission).detach(), torch.stack(teacher_nriqa).detach(), torch.stack(teacher_clip_score).detach()
 
 
 class Memory_bank_woT(nn.Module):
@@ -117,11 +117,11 @@ class Memory_bank_woT(nn.Module):
         else:
             return None
 
-    def update(self, image_name, image, musiq, clip_score, mask=None):
+    def update(self, image_name, image, nriqa, clip_score, mask=None):
         if mask is not None:
-            self.dict.update({image_name: [image, musiq, clip_score, mask]})
+            self.dict.update({image_name: [image, nriqa, clip_score, mask]})
         else:
-            self.dict.update({image_name: [image, musiq, clip_score, None]})
+            self.dict.update({image_name: [image, nriqa, clip_score, None]})
 
     def save(self, path, current_iter):
         # mkdir path/current_iter
@@ -144,43 +144,43 @@ class Memory_bank_woT(nn.Module):
             self.dict = pickle.load(f)
 
     @torch.no_grad()
-    def forward(self, image_name_list, image_list, musiq_list, clip_score_list, device, mask=None):
+    def forward(self, image_name_list, image_list, nriqa_list, clip_score_list, device, mask=None):
         pseudo_label = []
-        teacher_musiq = []
+        teacher_nriqa = []
         teacher_clip_score = []
         mask_stack = []
         for i in range(len(image_name_list)):
             temp_image_data = self.get(image_name_list[i])
             if temp_image_data is None:
                 pseudo_label.append(image_list[i])
-                teacher_musiq.append(musiq_list[i])
+                teacher_nriqa.append(nriqa_list[i])
                 teacher_clip_score.append(clip_score_list[i])
                 if mask is not None:
                     mask_stack.append(mask[i])
-                    self.update(image_name_list[i], image_list[i].detach().cpu().clone(),  musiq_list[i].detach().cpu().clone(), clip_score_list[i].detach().cpu().clone(), mask[i].detach().cpu().clone())
+                    self.update(image_name_list[i], image_list[i].detach().cpu().clone(),  nriqa_list[i].detach().cpu().clone(), clip_score_list[i].detach().cpu().clone(), mask[i].detach().cpu().clone())
                 else:
-                    self.update(image_name_list[i], image_list[i].detach().cpu().clone(),  musiq_list[i].detach().cpu().clone(), clip_score_list[i].detach().cpu().clone())
+                    self.update(image_name_list[i], image_list[i].detach().cpu().clone(),  nriqa_list[i].detach().cpu().clone(), clip_score_list[i].detach().cpu().clone())
             else:
-                temp_musiq = musiq_list[i].detach().cpu()
+                temp_nriqa = nriqa_list[i].detach().cpu()
                 temp_clip_score = clip_score_list[i].detach().cpu()
-                if temp_image_data[1] <= temp_musiq and temp_image_data[2] <= temp_clip_score: # better than previous
+                if temp_image_data[1] <= temp_nriqa and temp_image_data[2] <= temp_clip_score: # better than previous
                     pseudo_label.append(image_list[i].to(device))
-                    teacher_musiq.append(musiq_list[i].to(device))
+                    teacher_nriqa.append(nriqa_list[i].to(device))
                     teacher_clip_score.append(clip_score_list[i].to(device))
                     if mask is not None:
                         mask_stack.append(mask[i].to(device))
-                        self.update(image_name_list[i], image_list[i].detach().cpu().clone(), temp_musiq.clone(), temp_clip_score.clone(), mask[i].detach().cpu().clone())
+                        self.update(image_name_list[i], image_list[i].detach().cpu().clone(), temp_nriqa.clone(), temp_clip_score.clone(), mask[i].detach().cpu().clone())
                     else:
-                        self.update(image_name_list[i], image_list[i].detach().cpu().clone(), temp_musiq.clone(), temp_clip_score.clone())
+                        self.update(image_name_list[i], image_list[i].detach().cpu().clone(), temp_nriqa.clone(), temp_clip_score.clone())
                 else:
                     pseudo_label.append(temp_image_data[0].to(device))
-                    teacher_musiq.append(temp_image_data[1].to(device))
+                    teacher_nriqa.append(temp_image_data[1].to(device))
                     teacher_clip_score.append(temp_image_data[2].to(device))
                     if mask is not None:
                         mask_stack.append(temp_image_data[3].to(device))
 
         if mask is not None:
-            return torch.stack(pseudo_label).detach(), torch.stack(teacher_musiq).detach(), torch.stack(teacher_clip_score).detach(), torch.stack(mask_stack).detach()
+            return torch.stack(pseudo_label).detach(), torch.stack(teacher_nriqa).detach(), torch.stack(teacher_clip_score).detach(), torch.stack(mask_stack).detach()
         else:
-            return torch.stack(pseudo_label).detach(), torch.stack(teacher_musiq).detach(), torch.stack(teacher_clip_score).detach()
+            return torch.stack(pseudo_label).detach(), torch.stack(teacher_nriqa).detach(), torch.stack(teacher_clip_score).detach()
 

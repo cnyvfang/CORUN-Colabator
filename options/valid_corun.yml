@@ -1,5 +1,5 @@
 # general settings
-name: CORUN
+name: CORUN_WITH_COLABATOR_30000
 model_type: Colabator
 scale: 1
 num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
@@ -12,12 +12,12 @@ datasets:
   val_0:
     name: RTTS
     type: SingleDataset
-    dataroot_lq:  # test lq image set
+    dataroot_lq:  /data/fcy/Datasets/Dehaze/RTTS/JPEGImages  # test lq image set
     # data loader
     dataset_enlarge_ratio: 1
+    rescale_too_large_image: false
     prefetch_mode: ~
     num_worker_per_gpu: 12
-    gt_size: 288
     io_backend:
       type: disk
 
@@ -31,7 +31,7 @@ network_g:
 
 # path
 path:
-  pretrain_network_g: # pretrained weight
+  pretrain_network_g: experiments/trainS2_CORUN_RIDCP500_30000/models/net_g_5000.pth # pretrained weight
   pretrain_network_memory_bank: ~
   param_key_g: params_ema
   strict_load_g: true
@@ -41,10 +41,9 @@ path:
 
 val:
   pbar: true
-  val_freq: !!float 5000
   save_img: true
   window_size: 16
-  save_source: true
+  save_source: false
   save_all_stages: false
 
   metrics:
