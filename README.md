@@ -98,6 +98,7 @@ sh options/train_corun_with_depth.sh
 sh options/train_colabator_with_transmission.sh
 ```
 
+✨ **To fine-tune your own model using Colabator, you only need to add your network to corun_colabator/archs, define your own configuration file as sample_options and run the script.**
 
 ## 🏃‍♂️ Test
 Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [TBD]()
