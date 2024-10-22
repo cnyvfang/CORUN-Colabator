@@ -9,12 +9,12 @@ from tqdm import tqdm
 
 parser = argparse.ArgumentParser(description='Evaluate Image Quality')
 
-parser.add_argument('--input_dir', default='/Users/chengyufang/Downloads/Dehaze_Visualization/train_DASUM_RIDCP_MST_SAMPLE_AUG_BatchMore_AUGMORE_15k_with_mask/visualization/RTTS', type=str, help='Directory of validation images')
+parser.add_argument('--input_dir', default='', type=str, help='Directory of validation images')
 
 args = parser.parse_args()
 
 brisque = pyiqa.create_metric('brisque')
-nima = pyiqa.create_metric('nima', base_model_name='vgg16', train_dataset='ava', num_classes=10)
+nima = pyiqa.create_metric('nima')
 
 # Load images
 dir_0 = args.input_dir

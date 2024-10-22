@@ -131,7 +131,7 @@ class SingleDataset(data.Dataset):
 
 
 @DATASET_REGISTRY.register()
-class TestDataset(data.Dataset):
+class PairedTestDataset(data.Dataset):
     """Paired image dataset for image restoration.
 
     Read LQ (Low Quality, e.g. LR (Low Resolution), blurry, noisy, etc) and
@@ -161,7 +161,7 @@ class TestDataset(data.Dataset):
     """
 
     def __init__(self, opt):
-        super(TestDataset, self).__init__()
+        super(PairedTestDataset, self).__init__()
         self.opt = opt
         self.file_client = None
         self.io_backend_opt = opt['io_backend']
@@ -188,7 +188,6 @@ class TestDataset(data.Dataset):
         lq_path = self.paths[index]['lq_path']
         img_bytes = self.file_client.get(lq_path, 'lq')
         img_lq = imfrombytes(img_bytes, float32=True)
-
 
         # BGR to RGB, HWC to CHW, numpy to tensor
         img_gt, img_lq = img2tensor([img_gt, img_lq], bgr2rgb=True, float32=True)
