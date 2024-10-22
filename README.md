@@ -38,7 +38,7 @@ of PyTorch and Numpy, which led to erroneous experimental results. Users who use
 the repository code before 2024-10-23 should reconfigure the environment using the
 new script, and ensure that PyTorch version 2.1.2 is installed.
 ```
-
+- **2024-10-23:** We are processing the camera-ready version of this paper, the pretrained weights and test results will be released soon.
 - **2024-09-26:** This paper has been accepted by **NeurIPS 2024 as a Spotlight Paper**. 🎉 Thanks all the participants, reviewers, chairs and committee. We will release the code soon.
 - **2024-07-26:** We have organized and refined the code for the Colabator framework into a separate repository to facilitate more efficient application across different networks and tasks. The repository of Colabator Template will be made public together with the code of this repository once the paper is accepted. 😚
 - **2024-06-13:** We release the preprint and the citation.
