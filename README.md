@@ -64,6 +64,7 @@ We provide two types of dataset loading functions for model training: one **load
 ```bash
 git clone https://github.com/cnyvfang/CORUN-Colabator.git
 conda create -n corun_colabator python=3.9
+conda activate corun_colabator
 # If necessary, Replace pytorch-cuda=? with the compatible version of your GPU driver.
 conda install pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=? -c pytorch -c nvidia
 
