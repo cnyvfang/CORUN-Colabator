@@ -1,5 +1,5 @@
-pyiqa
-timm
+pyiqa==0.1.10
+timm==4.9.0.80
 einops
 tqdm
 mat73
