@@ -65,7 +65,8 @@ We provide two types of dataset loading functions for model training: one **load
 git clone https://github.com/cnyvfang/CORUN-Colabator.git
 conda create -n corun_colabator python=3.9
 # If necessary, Replace pytorch-cuda=? with the compatible version of your GPU driver.
-conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+conda install pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=? -c pytorch -c nvidia
+
 ```
 
 ### Install Modified BasicSR
@@ -101,7 +102,7 @@ sh options/train_colabator_with_transmission.sh
 ✨ **To fine-tune your own model using Colabator, you only need to add your network to corun_colabator/archs, define your own configuration file as sample_options and run the script.**
 
 ## 🏃‍♂️ Test
-Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [TBD]()
+Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [TBD]() (We will update it before camera-ready.)
 
 ### Inference
 ```bash
@@ -122,7 +123,7 @@ CUDA_VISIBLE_DEVICES=0 python evaluate.py --input_dir /path/to/results
 ## 🔍 Results
 
 We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and corresponding downstream tasks. More results can be found in the paper.
-**To quickly use the results of our experiments without manual inference or retraining, you can download all files dehazed/restored by our model from [TBD]().**
+**To quickly use the results of our experiments without manual inference or retraining, you can download all files dehazed/restored by our model from [TBD]().** (We will update it before camera-ready.)
 
 <details>
 <summary>Quantitative Comparison (click to expand)</summary>
