@@ -138,7 +138,7 @@ We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and c
 
 - Quantitative results on RTTS
   <p align="center">
-  <img width="900" src="figs/tab-1.png">
+  <img width="900" src="figs/tab-1.jpeg">
   </p>
 - User study scores on RTTS and Fattal’s data
   <p align="center">
