@@ -3,7 +3,7 @@
 # <p align=center> `CORUN 🏃 Colabator 🏃🏻‍♂️` </p>
 
 <b><p align=center> <a href='https://arxiv.org/pdf/2406.07966'><img src='https://img.shields.io/badge/ArXiv-2406.07966-red'></a>
-  NIPS2024 Spotlight ✨</p></b>
+  NeurlIPS2024 Spotlight ✨</p></b>
 
 This is the official PyTorch codes for the paper. 
 >**Real-world Image Dehazing with Coherence-based Label Generator and Cooperative Unfolding Network** <br> [Chengyu Fang](https://cnyvfang.github.io/), [Chunming He](https://chunminghe.github.io/), Fengyang Xiao, [Yulun Zhang](https://yulunzhang.com), Longxiang Tang, Yuelin Zhang, [Kai Li](https://kailigo.github.io), and Xiu Li <br>
