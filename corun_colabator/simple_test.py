@@ -21,9 +21,9 @@ parser = argparse.ArgumentParser(description='Single Image Dehazing using CORUN'
 
 parser.add_argument('--input_dir', default='/home/nfs/fcy/Datasets/Dehaze/RTTS/JPEGImages', type=str, help='Directory of validation images')
 parser.add_argument('--result_dir', default='./results/', type=str, help='Directory for results')
-parser.add_argument('--weights', default='./pretrained_weights/15k.pth', type=str, help='Path to weights')
+parser.add_argument('--weights', default='./pretrained_weights/CORUN.pth', type=str, help='Path to weights')
 parser.add_argument('--dataset', default='RTTS', type=str, help='Test Dataset')
-parser.add_argument('--opt', default='../options/test_corun.yml', type=str, help='options')
+parser.add_argument('--opt', default='../options/valid_corun.yml', type=str, help='options')
 
 
 args = parser.parse_args()

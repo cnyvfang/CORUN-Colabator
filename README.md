@@ -108,11 +108,13 @@ Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. Y
 
 ### Inference
 ```bash
-CUDA_VISIBLE_DEVICES=4  python3  corun_colabator/simple_test.py \
+CUDA_VISIBLE_DEVICES=0 sh options/valid.corun.sh
+# OR
+CUDA_VISIBLE_DEVICES=0  python3  corun_colabator/simple_test.py \
   --opt options/test_corun.yml \
   --input_dir /path/to/testset/images  \
-  --result_dir ./results/CORUN+ \
-  --weights ./pretrained_weights/CORUN+.pth \
+  --result_dir ./results/CORUN \
+  --weights ./pretrained_weights/CORUN.pth \
   --dataset RTTS
 ```
 
