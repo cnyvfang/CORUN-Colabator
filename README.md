@@ -47,13 +47,6 @@ new script, and ensure that PyTorch version 2.1.2 is installed.
 - **2024-05-28:** We release this repository, the preprint of full paper will be release soon.
 
 
-## 🔧 Todo 
-- [ ] Complete this repository
-- [ ] Release the pretrained weights and test results
-- [x] Release the train test script with options
-- [x] Relsase the codebase
-- [x] Release the preprint
-
 ## ⚙️ Dependencies and Installation
 
 ### Datasets
