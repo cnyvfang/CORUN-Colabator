@@ -1,4 +1,4 @@
-name: trainS2_CORUN_RIDCP500_30000
+name: trainS2_CORUN_RIDCP500
 model_type: Colabator_with_Transmission
 scale: 1
 num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
@@ -21,6 +21,9 @@ colabator:
   nr_iqa_scale: [0,100] # scale or sigmoid
 
   block_size: 32 # trusted weight block size
+
+  weight_map_calculation: 'addition' # addition, multiplication
+
 
 # dataset and data loader settings
 datasets:
@@ -74,7 +77,7 @@ network_g:
 
 # path
 path:
-  pretrain_network_g: ./experiments/trainS1_CORUN_RIDCP500/models/net_g_30000.pth # pretrained weight
+  pretrain_network_g: ./experiments/trainS1_CORUN_RIDCP500/models/net_g.pth # pretrained weight
   pretrain_network_memory_bank: ~
   param_key_g: params_ema
   strict_load_g: true

@@ -22,6 +22,8 @@ colabator:
 
   block_size: 32 # trusted weight block size
 
+  weight_map_calculation: 'addition' # addition, multiplication
+
 # dataset and data loader settings
 datasets:
   train:

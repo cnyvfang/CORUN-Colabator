@@ -82,6 +82,8 @@ class Colabator_with_Transmission(SRModel):
         tokenizer_type = self.opt['colabator'].get('tokenizer_type', None)
         self.clip_better = self.opt['colabator'].get('clip_better', None)
         self.degradation_type = self.opt['colabator'].get('degradation_type', None)
+        self.weight_map_calculation = self.opt['colabator'].get('weight_map_calculation', 'addition')
+
         self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained(clip_model_type,                                                               pretrained=checkpoint)
         self.clip_model = self.model_to_device(self.clip_model)
         self.clip_model.eval()
@@ -150,7 +152,7 @@ class Colabator_with_Transmission(SRModel):
 
         return blocked_image
 
-    def get_clip_hazy_rate(self, img):
+    def get_clip_degrad_rate(self, img):
         image = self.clip_preprocess(img)
         sum_probs = 0
         for degradation in self.degradation_type:
@@ -163,8 +165,8 @@ class Colabator_with_Transmission(SRModel):
                 sum_probs = sum_probs + probs
         return sum_probs
 
-    def get_batch_avg_hazy_rate(self, imgs):
-        sum_rate = self.get_clip_hazy_rate(imgs)
+    def get_batch_avg_degrad_rate(self, imgs):
+        sum_rate = self.get_clip_degrad_rate(imgs)
         sum_rate = sum_rate.mean()
         return sum_rate / imgs.shape[0]
 
@@ -253,9 +255,9 @@ class Colabator_with_Transmission(SRModel):
 
             if self.opt['colabator'].get('use_clip', False):
                 # local
-                teacher_score_sequence = self.get_clip_hazy_rate(teacher_tar_blocks)
+                teacher_score_sequence = self.get_clip_degrad_rate(teacher_tar_blocks)
                 # global
-                teacher_score = self.get_clip_hazy_rate(teacher_tar)
+                teacher_score = self.get_clip_degrad_rate(teacher_tar)
                 # unblock image
                 teacher_score_mask = len(self.degradation_type) - self.unblock_image(teacher_score_sequence,
                                                                                      (self.block_size, self.block_size),
@@ -271,7 +273,11 @@ class Colabator_with_Transmission(SRModel):
                 teacher_score = 0
 
         # final mask
-        teacher_mask = (teacher_nr_iqa_score_mask + teacher_score_mask) / (len(self.degradation_type) + 1)
+        if self.weight_map_calculation == 'multiplication':
+            teacher_mask = teacher_nr_iqa_score_mask * (teacher_score_mask / len(self.degradation_type))
+        else:
+            teacher_mask = (teacher_nr_iqa_score_mask + teacher_score_mask) / (len(self.degradation_type) + 1)
+
 
         teacher, teacher_transmission, teacher_nr_iqa_score, teacher_score, teacher_mask = self.memory_bank(self.real_name, teacher, teacher_transmission, teacher_nr_iqa_score, teacher_score, self.device, teacher_mask)
         teacher = teacher.to(self.device)
@@ -323,8 +329,8 @@ class Colabator_with_Transmission(SRModel):
             l_total += l_asm
 
         if self.opt['train'].get('use_clip_loss', False):
-            clip_loss = self.get_batch_avg_hazy_rate(output)
-            clip_loss += self.get_batch_avg_hazy_rate(real_output)
+            clip_loss = self.get_batch_avg_degrad_rate(output)
+            clip_loss += self.get_batch_avg_degrad_rate(real_output)
             loss_dict['clip_loss'] = clip_loss
             l_total += clip_loss
 

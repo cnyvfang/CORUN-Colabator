@@ -31,7 +31,7 @@ network_g:
 
 # path
 path:
-  pretrain_network_g: experiments/trainS2_CORUN_RIDCP500_30000/models/net_g_5000.pth # pretrained weight
+  pretrain_network_g: ./CORUN.pth # pretrained weight
   pretrain_network_memory_bank: ~
   param_key_g: params_ema
   strict_load_g: true
