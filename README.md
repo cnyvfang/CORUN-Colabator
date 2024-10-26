@@ -38,6 +38,7 @@ of PyTorch and Numpy, which led to erroneous experimental results. Users who use
 the repository code before 2024-10-23 should reconfigure the environment using the
 new script, and ensure that PyTorch version 2.1.2 is installed.
 ```
+- **2024-10-26:** Our results and pre-trained weights have been released! ❤️
 - **2024-10-23:** We are processing the camera-ready version of this paper, the pretrained weights and test results will be released soon.
 - **2024-09-26:** This paper has been accepted by **NeurIPS 2024 as a Spotlight Paper**. 🎉 Thanks all the participants, reviewers, chairs and committee. We will release the code soon.
 - **2024-07-26:** We have organized and refined the code for the Colabator framework into a separate repository to facilitate more efficient application across different networks and tasks. The repository of Colabator Template will be made public together with the code of this repository once the paper is accepted. 😚
@@ -110,7 +111,7 @@ sh options/train_colabator_with_transmission.sh
 ✨ **To fine-tune your own model using Colabator, you only need to add your network to corun_colabator/archs, define your own configuration file as sample_options and run the script.**
 
 ## 🏃‍♂️ Test
-Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [TBD]() (We will update it before camera-ready.)
+Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing) (We will update it before camera-ready.)
 
 ### Inference
 ```bash
@@ -131,7 +132,7 @@ CUDA_VISIBLE_DEVICES=0 python evaluate.py --input_dir /path/to/results
 ## 🔍 Results
 
 We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and corresponding downstream tasks. More results can be found in the paper.
-**To quickly use the results of our experiments without manual inference or retraining, you can download all files dehazed/restored by our model from [TBD]().** (We will update it before camera-ready.)
+**To quickly use the results of our experiments without manual inference or retraining, you can download all files dehazed/restored by our model from [Google Drive](https://drive.google.com/file/d/1yhaNHc8eV-88Bn7YKa7PehZsUddRBjA1/view?usp=sharing).** 
 
 <details>
 <summary>Quantitative Comparison (click to expand)</summary>
