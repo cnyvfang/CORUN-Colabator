@@ -51,7 +51,7 @@ class SingleDataset(data.Dataset):
         self.std = opt['std'] if 'std' in opt else None
         self.rescale_too_large_image = self.opt['rescale_too_large_image'] if 'rescale_too_large_image' in self.opt else False
         print_state = 0
-        if print_state < 1 and self.rescale_too_large_image:
+        if print_state < 10 and self.rescale_too_large_image:
             print_state("RESCALE TOO LARGE IMAGE TO SMALL IMAGE!!!!!")
             print_state += 1
 
