@@ -94,11 +94,18 @@ Download the pre-trained da-clip weights and place it in `./pretrained_weights/`
 ⚠️ **Please replace the dataset path in the options file with your own dataset path.**
 ### Pretrain CORUN
 ```bash
+# Multi-GPU
 sh options/train_corun_with_depth.sh
+# Single-GPU
+sh options/train_corun_with_depth_single_gpu.sh
+
 ```
 ### Fine-tune CORUN with Colabator
 ```bash
+# Multi-GPU
 sh options/train_colabator_with_transmission.sh
+# Single-GPU
+sh options/train_colabator_with_transmission_single_gpu.sh
 ```
 
 ✨ **To fine-tune your own model using Colabator, you only need to add your network to corun_colabator/archs, define your own configuration file as sample_options and run the script.**

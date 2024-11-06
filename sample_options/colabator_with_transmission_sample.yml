@@ -59,12 +59,26 @@ datasets:
   # Uncomment these for validation
   val:
     name: Testset
-    type: TestDataset
+    type: PairedTestDataset
     dataroot_lq: # test lq image set
     dataroot_gt: # test gt image set or same as test lq image set
     num_worker_per_gpu: 5
     io_backend:
       type: disk
+
+  # Or
+#  val_0:
+#    name: Testset
+#    type: SingleDataset
+#    dataroot_lq:  # test lq image set
+#    dataset_enlarge_ratio: 1
+#    rescale_too_large_image: false
+#    prefetch_mode: ~
+#    num_worker_per_gpu: 12
+#    io_backend:
+#      type: disk
+
+
 # network structures
 
 ###########################################

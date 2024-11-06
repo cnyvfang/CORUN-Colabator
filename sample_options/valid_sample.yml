@@ -11,7 +11,7 @@ datasets:
   # Uncomment these for validation
   val_0:
     name: DATASET_NAME
-    type: TestDataset
+    type: PairedTestDataset
     dataroot_lq: # test lq image set
     dataroot_gt: # test gt image set or same as test lq image set
     # data loader
@@ -21,11 +21,11 @@ datasets:
     io_backend:
       type: disk
 
+  # Or
 #  val_0:
-#    name: RTTS
+#    name: Testset
 #    type: SingleDataset
 #    dataroot_lq:  # test lq image set
-#    # data loader
 #    dataset_enlarge_ratio: 1
 #    rescale_too_large_image: false
 #    prefetch_mode: ~
