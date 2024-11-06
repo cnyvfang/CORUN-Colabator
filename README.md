@@ -111,7 +111,7 @@ sh options/train_colabator_with_transmission_single_gpu.sh
 ✨ **To fine-tune your own model using Colabator, you only need to add your network to corun_colabator/archs, define your own configuration file as sample_options and run the script.**
 
 ## 🏃‍♂️ Test
-Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing) (We will update it before camera-ready.)
+Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing)
 
 ### Inference
 ```bash
