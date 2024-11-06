@@ -61,7 +61,7 @@ We provide two types of dataset loading functions for model training: one **load
 **For the haze generation method**, we support reading the RIDCP500 dataset (where depth maps are stored as .npy files) as well as the OTS/ITS datasets (where depth maps are stored as .mat files). If your dataset contains paired clean images and depth maps, you can also use your own dataset. If your dataset does not include depth maps, you can generate corresponding depth maps using methods such as RA-Depth.
 **For the paired degraded-clean method**, you can use any paired degraded-clean image pairs for training and testing.
 
-### Init Conda Environment and Clone Repo
+### Initialize Conda Environment and Clone Repo
 ```bash
 git clone https://github.com/cnyvfang/CORUN-Colabator.git
 conda create -n corun_colabator python=3.9
