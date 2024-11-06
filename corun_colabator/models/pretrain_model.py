@@ -84,7 +84,10 @@ class Pretrain(SRModel):
         text = text.to(self.device)
 
         with torch.no_grad(), torch.cuda.amp.autocast():
-            text_features = self.clip_model.module.encode_text(text)
+            if self.opt['dist']:
+                text_features = self.clip_model.module.encode_text(text)
+            else:
+                text_features = self.clip_model.encode_text(text)
             text_features /= text_features.norm(dim=-1, keepdim=True)
             self.text_features = text_features
 
@@ -140,7 +143,10 @@ class Pretrain(SRModel):
     def get_clip_hazy_rate(self, img):
         image = self.clip_preprocess(img)
         with torch.no_grad(), torch.cuda.amp.autocast():
-            _, degra_features = self.clip_model.module.encode_image(image, control=True)
+            if self.opt['dist']:
+                _, degra_features = self.clip_model.module.encode_image(image, control=True)
+            else:
+                _, degra_features = self.clip_model.encode_image(image, control=True)
             # image_features /= image_features.norm(dim=-1, keepdim=True)
             degra_features /= degra_features.norm(dim=-1, keepdim=True)
             text_probs = (100.0 * degra_features @ self.text_features.T).softmax(dim=-1)
