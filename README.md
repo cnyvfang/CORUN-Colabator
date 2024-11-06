@@ -87,6 +87,10 @@ pip install -r requirements.txt
 python setup.py develop
 python init_modules.py
 ```
+🚩 If you are in China Mainland, run the script before init_modules.py to speed up the download of the pre-trained models:
+```bash
+export HF_ENDPOINT=https://hf-mirror.com
+```
 
 Download the pre-trained da-clip weights and place it in `./pretrained_weights/`. You can download the daclip weights we used from [Google Drive](https://drive.google.com/file/d/1bIlKYouxwizQXbud7SXd5F5oOyoHFH4x/view?usp=sharing). You can also choose other type of clip models and corresponding weights from openclip, if you do this, don't forget to modify your options.
 
