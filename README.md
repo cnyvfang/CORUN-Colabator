@@ -38,6 +38,7 @@ of PyTorch and Numpy, which led to erroneous experimental results. Users who use
 the repository code before 2024-10-23 should reconfigure the environment using the
 new script, and ensure that PyTorch version 2.1.2 is installed.
 ```
+- **2024-11-06:** We fix some bugs in the code and support the single GPU training now. 🐞
 - **2024-10-26:** Our results and pre-trained weights have been released! ❤️
 - **2024-10-23:** We are processing the camera-ready version of this paper, the pretrained weights and test results will be released soon.
 - **2024-09-26:** This paper has been accepted by **NeurIPS 2024 as a Spotlight Paper**. 🎉 Thanks all the participants, reviewers, chairs and committee. We will release the code soon.

@@ -24,7 +24,6 @@ colabator:
 
   weight_map_calculation: 'addition' # addition, multiplication
 
-
 # dataset and data loader settings
 datasets:
   train:

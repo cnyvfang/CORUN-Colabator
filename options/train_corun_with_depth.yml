@@ -1,4 +1,3 @@
-# general settings
 name: trainS1_CORUN_RIDCP500
 model_type: CORUN_Pretrain_with_Transmission
 scale: 1
