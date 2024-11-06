@@ -7,6 +7,9 @@ from torchvision import transforms
 import argparse
 from tqdm import tqdm
 
+
+os.environ['HF_HUB_OFFLINE'] = True
+
 parser = argparse.ArgumentParser(description='Evaluate Image Quality')
 
 parser.add_argument('--input_dir', default='', type=str, help='Directory of validation images')
