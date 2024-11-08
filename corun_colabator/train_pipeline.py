@@ -277,7 +277,8 @@ def train_pipeline(root_path):
 
             # save models and training states
             if current_iter % opt['logger']['save_checkpoint_freq'] == 0:
-                torch.distributed.barrier()
+                if opt['dist']:
+                    torch.distributed.barrier()
                 logger.info('Saving models and training states.')
                 model.save(epoch, current_iter)
 
@@ -286,7 +287,8 @@ def train_pipeline(root_path):
                 if len(val_loaders) > 1:
                     logger.warning('Multiple validation datasets are *only* supported by SRModel.')
                 for val_loader in val_loaders:
-                    torch.distributed.barrier()
+                    if opt['dist']:
+                        torch.distributed.barrier()
                     model.validation(val_loader, current_iter, tb_logger, opt['val']['save_img'])
 
             data_timer.start()
