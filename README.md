@@ -38,6 +38,7 @@ of PyTorch and Numpy, which led to erroneous experimental results. Users who use
 the repository code before 2024-10-23 should reconfigure the environment using the
 new script, and ensure that PyTorch version 2.1.2 is installed.
 ```
+- **2025-01-17:** We upload a simple example to **pretrain**(restormer_sample.yml) and **fine-tune**(colabator_sample.yml) **Restormer** with our framework, you can find it in the sample_options folder. 🎉
 - **2024-11-06:** We fix some bugs in the code and support the single GPU training now. 🐞
 - **2024-10-26:** Our results and pre-trained weights have been released! ❤️
 - **2024-10-23:** We are processing the camera-ready version of this paper, the pretrained weights and test results will be released soon.
