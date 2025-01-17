@@ -68,16 +68,20 @@ class Pretrain(SRModel):
                 self.mixing_augmentation = Mixing_Augment(mixup_beta, use_identity, self.device)
 
         if self.is_train:
-            self.init_clip()
-
+            if self.opt['clip_plugin'].get('use_clip', False) or self.opt['train'].get('use_clip_loss', False):
+                self.init_clip()
 
     def init_clip(self):
-        checkpoint = './daclip_ViT-B-32.pt'
-        self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained('daclip_ViT-B-32',
+        clip_model_type = self.opt['clip_plugin'].get('clip_model_type', None)
+        checkpoint = self.opt['clip_plugin'].get('pretrained_clip_weight', None)
+        tokenizer_type = self.opt['clip_plugin'].get('tokenizer_type', None)
+        self.clip_better = self.opt['clip_plugin'].get('clip_better', None)
+        self.degradation_type = self.opt['clip_plugin'].get('degradation_type', None)
+        self.clip_model, self.clip_preprocess = open_clip.create_model_from_pretrained(clip_model_type,
                                                                                        pretrained=checkpoint)
         self.clip_model = self.model_to_device(self.clip_model)
         self.clip_model.eval()
-        self.tokenizer = open_clip.get_tokenizer('ViT-B-32')
+        self.tokenizer = open_clip.get_tokenizer(tokenizer_type)
         degradations = ['motion-blurry', 'hazy', 'jpeg-compressed', 'low-light', 'noisy', 'raindrop', 'rainy',
                         'shadowed', 'snowy', 'uncompleted']
         text = self.tokenizer(degradations)
@@ -115,10 +119,8 @@ class Pretrain(SRModel):
         window_size = self.opt['val'].get('window_size', 0)
         if window_size:
             lq, mod_pad_h, mod_pad_w = self.pad_test(self.lq,window_size)
-            gt, gt_mod_pad_h, gt_mod_pad_w = self.pad_test(self.gt,window_size)
         else:
             lq = self.lq
-            gt = self.gt
 
         if hasattr(self, 'net_g_ema'):
             self.net_g_ema.eval()
@@ -139,19 +141,21 @@ class Pretrain(SRModel):
             _, _, h, w = self.output.size()
             self.output = self.output[:, :, 0:h - mod_pad_h * scale, 0:w - mod_pad_w * scale]
 
-
     def get_clip_hazy_rate(self, img):
         image = self.clip_preprocess(img)
-        with torch.no_grad(), torch.cuda.amp.autocast():
-            if self.opt['dist']:
-                _, degra_features = self.clip_model.module.encode_image(image, control=True)
-            else:
-                _, degra_features = self.clip_model.encode_image(image, control=True)
-            # image_features /= image_features.norm(dim=-1, keepdim=True)
-            degra_features /= degra_features.norm(dim=-1, keepdim=True)
-            text_probs = (100.0 * degra_features @ self.text_features.T).softmax(dim=-1)
-            probs = text_probs[:,1]
-            return probs
+        sum_probs = 0
+        for degradation in self.degradation_type:
+            with torch.no_grad(), torch.cuda.amp.autocast():
+                if self.opt['dist']:
+                    _, degra_features = self.clip_model.module.encode_image(image, control=True)
+                else:
+                    _, degra_features = self.clip_model.encode_image(image, control=True)
+                # image_features /= image_features.norm(dim=-1, keepdim=True)
+                degra_features /= degra_features.norm(dim=-1, keepdim=True)
+                text_probs = (100.0 * degra_features @ self.text_features.T).softmax(dim=-1)
+                probs = text_probs[:, degradation]
+                sum_probs = sum_probs + probs
+        return sum_probs
 
     def get_batch_avg_hazy_rate(self, imgs):
         sum_rate = self.get_clip_hazy_rate(imgs)
@@ -168,15 +172,14 @@ class Pretrain(SRModel):
 
         # pixel loss
         if self.cri_pix:
-
             l_pix = self.cri_pix(self.outputs[0], self.gt)
             loss_dict['l_pix'] = l_pix
             l_total += l_pix
 
-
-        clip_loss = self.get_batch_avg_hazy_rate(self.outputs[0])
-        loss_dict['clip_loss'] = clip_loss
-        l_total += clip_loss
+        if self.opt['train'].get('use_clip_loss', False):
+            clip_loss = self.get_batch_avg_hazy_rate(self.outputs[0])
+            loss_dict['clip_loss'] = clip_loss
+            l_total += clip_loss
 
         # perceptual loss
         if self.cri_contrastperceptual:

@@ -1,5 +1,6 @@
-name: trainS1_CORUN_RIDCP500
-model_type: CORUN_Pretrain_with_Transmission
+# general settings
+name: Stage_1_Restormer_Sample
+model_type: Pretrain
 scale: 1
 num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
 manual_seed: 0
@@ -19,57 +20,65 @@ clip_plugin:
 datasets:
   train:
     name: TrainSet
-    type: HazeOnlineDataset
-    dataroot_gt: /data/fcy/Datasets/Dehaze/RIDCP/rgb_500
-    dataroot_depth: /data/fcy/Datasets/Dehaze/RIDCP/depth_500
-    beta_range: [ 0.2, 2.8 ]
-    A_range: [ 0.5, 1.8 ]
-    color_p: 1.0
-    color_range: [ -0.025, 0.025 ]
+    type: PairedDataset
+    dataroot_gt: # syn gt image set
+    dataroot_lq: # syn lq image set
 
     filename_tmpl: '{}'
     io_backend:
       type: disk
 
-    use_resize_crop: false
-    use_flip: true
+    use_resize_crop: true
+    use_hflip: true
     use_rot: false
 
     num_worker_per_gpu: 20
     batch_size_per_gpu: 2
     mini_batch_sizes: [ 2 ]             # Batch size per gpu
-    iters: [ 30000 ]
-    gt_size: 288 #288   # Max patch size for progressive training
-    gt_sizes: [ 288 ] # 288  # Patch sizes for progressive training.
+    iters: [ 100000 ]
+    gt_size: 256   # Max patch size for progressive training
+    gt_sizes: [ 256 ]  # Patch sizes for progressive training.
 
     # data loader
     use_shuffle: true
     dataset_enlarge_ratio: 10
     prefetch_mode: ~
 
+  # Uncomment these for validation
   val:
-    name: RTTS
-    type: SingleDataset
-    dataroot_lq: /data/fcy/Datasets/Dehaze/RTTS
-    rescale_too_large_image: false
+    name: Testset
+    type: PairedTestDataset
+    dataroot_lq: # test lq image set
+    dataroot_gt: # test gt image set or same as test lq image set
+    num_worker_per_gpu: 5
     io_backend:
       type: disk
 
-#  Or:
-#  val:
+  # Or
+#  val_0:
 #    name: Testset
-#    type: PairedTestDataset
-#    dataroot_lq: # test lq image set
-#    dataroot_gt: # test gt image set or same as test lq image set
-#    num_worker_per_gpu: 5
+#    type: SingleDataset
+#    dataroot_lq:  # test lq image set
+#    dataset_enlarge_ratio: 1
+#    rescale_too_large_image: false
+#    prefetch_mode: ~
+#    num_worker_per_gpu: 12
 #    io_backend:
 #      type: disk
-#
 
 # network structures
 network_g:
-  type: CORUN
-  depth: 4
+  type: Restormer
+  inp_channels: 3
+  out_channels: 3
+  dim: 48
+  num_blocks: [4,6,6,8]
+  num_refinement_blocks: 4
+  heads: [1,2,4,8]
+  ffn_expansion_factor: 1.5
+  bias: False
+  LayerNorm_type: WithBias
+  dual_pixel_task: False
 
 # path
 path:
@@ -91,13 +100,12 @@ train:
 
   gen_scheduler:
     type: CosineAnnealingRestartCyclicLR
-    periods: [30000]
+    periods: [100000]
     restart_weights: [1]
     eta_mins: [0.0001]
 
-  total_iter: 30000
+  total_iter: 100000
   warmup_iter: -1  # no warm up
-
 
   mixing_augs:
     mixup: false
@@ -112,6 +120,8 @@ train:
 
   contrastperceptual_opt:
     type: ContrastPerceptualLoss
+    # vgg_layer_indices: 2,7,12,21,30
+    # weights: 1/32, 1/16, 1/8, 1/4, 1
     layer_weights:
       'relu1_1': !!float 3.125e-2
       'relu2_1': !!float 6.25e-2
@@ -126,30 +136,28 @@ train:
     criterion: l1
 
 
+# Uncomment these for validation
 # validation settings
 val:
   pbar: true
   val_freq: !!float 5000
   save_img: true
-  save_source: false
-  save_all_stages: ture
   window_size: 16
 
   metrics:
-    brisque: # metric name
-      type: calculate_brisque
+    ssim:
+      type: calculate_ssim
       crop_border: 0
-      better: lower
+      test_y_channel: false
 
-    nima:
-      type: calculate_nima
-      crop_border: 0
-      better: higher
-
+    psnr: # metric name
+        type: calculate_psnr
+        crop_border: 0
+        test_y_channel: false
 
 # logging settings
 logger:
-  print_freq: 500
+  print_freq: 1000
   save_checkpoint_freq: !!float 5e3
   use_tb_logger: true
   wandb:
