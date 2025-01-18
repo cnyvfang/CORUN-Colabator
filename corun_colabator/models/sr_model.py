@@ -376,8 +376,11 @@ class SRModel(BaseModel):
                     if self.opt['is_train']:
                         save_img_path = osp.join(self.opt['path']['visualization'], img_name,
                                                  f'{img_name}_{current_iter}.png')
-                        save_lq_path = osp.join(self.opt['path']['visualization'], img_name,
-                                                f'{img_name}_lq.png')
+                        if save_source_img:
+                            save_lq_path = osp.join(self.opt['path']['visualization'], img_name,
+                                                    f'{img_name}_lq.png')
+                            save_gt_path = osp.join(self.opt['path']['visualization'], img_name,
+                                                    f'{img_name}_gt.png')
 
                     else:
                         save_img_path = osp.join(self.opt['path']['visualization'], dataset_name,
