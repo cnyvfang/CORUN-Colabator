@@ -174,10 +174,11 @@ class SemiDataset(data.Dataset):
 
         # Load gt and lq images. Dimension order: HWC; channel order: BGR;
         # image range: [0, 1], float32.
-        gt_path = self.paths[index]['gt_path']
+        len_syn = len(self.paths)
+        gt_path = self.paths[index % len_syn]['gt_path']
         img_bytes = self.file_client.get(gt_path, 'gt')
         img_gt = imfrombytes(img_bytes, float32=True)
-        lq_path = self.paths[index]['lq_path']
+        lq_path = self.paths[index % len_syn]['lq_path']
         img_bytes = self.file_client.get(lq_path, 'lq')
         img_lq = imfrombytes(img_bytes, float32=True)
 
@@ -234,4 +235,7 @@ class SemiDataset(data.Dataset):
         }
 
     def __len__(self):
-        return len(self.paths)
+        if len(self.paths) >= len(self.real_paths):
+            return len(self.paths)
+        else:
+            return len(self.real_paths)

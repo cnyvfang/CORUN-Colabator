@@ -10,11 +10,11 @@ import torch.nn as nn
 
 try:
     import timm
-    from timm.models.layers import Mlp, to_2tuple
+    from timm.layers import Mlp, to_2tuple
     try:
         # old timm imports < 0.8.1
-        from timm.models.layers.attention_pool2d import RotAttentionPool2d
-        from timm.models.layers.attention_pool2d import AttentionPool2d as AbsAttentionPool2d
+        from timm.layers.attention_pool2d import RotAttentionPool2d
+        from timm.layers.attention_pool2d import AttentionPool2d as AbsAttentionPool2d
     except ImportError:
         # new timm imports >= 0.8.1
         from timm.layers import RotAttentionPool2d
