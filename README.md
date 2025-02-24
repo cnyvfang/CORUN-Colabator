@@ -1,4 +1,4 @@
-<p align=center><img src="figs/logo.png" width="200px"> </p>
+<p align=center><img src="figs/logo_new.png" width="200px"> </p>
 
 # <p align=center> `CORUN 🏃 Colabator 🏃🏻‍♂️` </p>
 
