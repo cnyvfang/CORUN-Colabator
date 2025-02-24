@@ -99,7 +99,7 @@ Download the pre-trained da-clip weights and place it in `./pretrained_weights/`
 ## 🏃 Train
 ⚠️ **Please replace the dataset path in the options file with your own dataset path.**
 
-⚠️ **If you must use a single GPU for training, we also provide the training script. When the GPU memory is insufficient, you can reduce the image size or batch size in the option files. Please note that the results in our paper are based on 4GPU training, and the results obtained from single GPU training may differ from those in the paper.**
+⚠️ **If you must use a single GPU for training, we also provide the training script. When the GPU memory is insufficient, you can reduce the image size or batch size in the option files. Please note that the results in our paper are based on 4GPU training, and the results obtained from single GPU training may differ from those in the paper, although we still believe it will have a good result.**
 
 ### Pretrain CORUN
 ```bash
