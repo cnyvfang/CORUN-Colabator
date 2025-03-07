@@ -1,5 +1,5 @@
 name: trainS1_CORUN_RIDCP500
-model_type: CORUN_Pretrain_with_Transmission
+model_type: Pretrain_with_Transmission
 scale: 1
 num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
 manual_seed: 0
