@@ -38,7 +38,7 @@ of PyTorch and Numpy, which led to erroneous experimental results. Users who use
 the repository code before 2024-10-23 should reconfigure the environment using the
 new script, and ensure that PyTorch version 2.1.2 is installed.
 ```
-- **2025-01-17:** We upload a simple example to **pretrain**(restormer_sample.yml) and **fine-tune**(colabator_sample.yml) **Restormer** with our framework, you can find it in the sample_options folder. 🎉
+- **2025-01-17:** We upload a simple example to **pretrain**(restormer_sample.yml) and **fine-tune**(colabator_sample.yml) **Restormer** with our framework, you can find it in the option_templates folder. 🎉
 - **2024-11-06:** We fix some bugs in the code and support the single GPU training now. 🐞
 - **2024-10-26:** Our results and pre-trained weights have been released! ❤️
 - **2024-10-23:** We are processing the camera-ready version of this paper, the pretrained weights and test results will be released soon.
@@ -99,7 +99,7 @@ Download the pre-trained da-clip weights and place it in `./pretrained_weights/`
 ## 🏃 Train
 ⚠️ **Please replace the dataset path in the options file with your own dataset path.**
 
-⚠️ **If you must use a single GPU for training, we also provide the training script. When the GPU memory is insufficient, you can reduce the image size or batch size in the option files. Please note that the results in our paper are based on 4GPU training, and the results obtained from single GPU training may differ from those in the paper, although we still believe it will have a good result.**
+⚠️ **If using a single GPU for training, we provide a script. If memory is insufficient, reduce the image or batch size in the option files. Note that our paper’s results are based on 4-GPU training, so single-GPU results may differ, but should still be good.**
 
 ### Pretrain CORUN
 ```bash
@@ -117,7 +117,17 @@ sh options/train_colabator_with_transmission.sh
 sh options/train_colabator_with_transmission_single_gpu.sh
 ```
 
-✨ **To fine-tune your own model using Colabator, you only need to add your network to corun_colabator/archs, define your own configuration file as sample_options and run the script.**
+
+### Colabator with your own models
+To fine-tune your own model using Colabator, you only need to add your network to [archs](corun_colabator/archs), define your own configuration file and run the script. 
+
+We provide configuration file templates based on Restormer in the [option_templates](option_templates) folder, which you can refer to and modify.
+
+You can modify the files named with Stage 1 to pretrain your model. If you have already completed pretraining, modify the files named with Stage 2 to use our Colabator for fine-tuning.
+
+If you are working on image dehazing and your datasets have corresponding depth maps, you can use the files in the [dehaze](option_templates/dehaze) subfolder instead of the Stage 2 files in [option_templates](option_templates).
+
+If you need to define your own loss function, you need to modify the corresponding [models](corun_colabator/models) and [losses](corun_colabator/losses) before you invoke it in option files.
 
 ## 🏃‍♂️ Test
 Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN+ weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing)
