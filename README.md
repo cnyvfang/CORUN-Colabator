@@ -112,9 +112,9 @@ sh options/train_corun_with_depth_single_gpu.sh
 ### Fine-tune CORUN with Colabator
 ```bash
 # Multi-GPU
-sh options/train_colabator_with_transmission.sh
+sh options/train_colabator_with_depth.sh
 # Single-GPU
-sh options/train_colabator_with_transmission_single_gpu.sh
+sh options/train_colabator_with_depth_single_gpu.sh
 ```
 
 
