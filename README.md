@@ -53,7 +53,7 @@ We provide two types of dataset loading functions for model training: **1. loads
 ```diff
 + 1. For image dehazing task with online haze generation. (Our CORUN used)
 ```
-We support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). You can also use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
+We support loading the depth map from .npy (used by RICDP500) and .mat files (used by OTS/ITS). You can also use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
 
 To train or fine-tune our CORUN or any other Image Dehazing methods by online haze generation. **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-for-image-dehazing-task-corun-as-example)
 
