@@ -51,10 +51,18 @@ This is the official PyTorch codes for the paper.
 We provide two types of dataset loading functions for model training: **1. loads clean images and corresponding depth maps to generate hazy images** using the RIDCP Online Haze Generation Pipeline, **2. directly loads paired clean and degraded images**. You can choose the appropriate method based on your dataset and task.
 
 ```diff
-+ 1. Training/Fine-tuning for image dehazing task by online haze generation, we support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). Please refer to [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task). You can alse use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
-
-- 2. Training/Fine-tuning for any image restoration tasks (also including image dehazing task) by offline paired degraded-clean images, please refer to [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
++ 1. Training/Fine-tuning for image dehazing task by online haze generation.
 ```
+We support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). You can also use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
+
+**Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task)
+
+```diff
+- 2. Training/Fine-tuning for any image restoration tasks by offline paired degraded-clean images.
+```
+For any Image-to-Image Image Restoration tasks (also including image dehazing task).
+**Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
+
 
 ## ⚙️ Dependencies and Installation
 
