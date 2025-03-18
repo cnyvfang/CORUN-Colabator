@@ -32,7 +32,7 @@ This is the official PyTorch codes for the paper.
 
 
 ## 🔥 News
-- **2025-01-17:** We upload a simple example to **pretrain**(restormer_sample.yml) and **fine-tune**(colabator_sample.yml) **Restormer** with our framework, you can find it in the option_templates folder. 🎉
+- **2025-01-17:** We upload a simple example to pretrain and fine-tune with our models. 🎉
 - **2024-11-06:** We fix some bugs in the code and support the single GPU training now. 🐞
 - **2024-10-26:** Our results and pre-trained weights have been released! ❤️
 - **2024-10-23:** We are processing the camera-ready version of this paper, the pretrained weights and test results will be released soon.
