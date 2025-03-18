@@ -72,7 +72,12 @@ To train or fine-tune any Image-to-Image based Image Restoration tasks (also inc
 - **Duplicate Removed URHI** can be downloaded from [Google Drive](https://drive.google.com/file/d/1B29LsNhBWoRHDk2R_cc5nNqcn7c87sg-/view?usp=sharing)
 - **RIDCP500** can be downloaded from [RIDCP's Repo](https://github.com/RQ-Wu/RIDCP_dehazing)
 
-### 2. Initialize Conda Environment and Clone Repo
+### 2. Download Necessary Pretrained Weights
+
+Download the pre-trained da-clip weights and place it in `./pretrained_weights/`. You can download the daclip weights we used from [Google Drive](https://drive.google.com/file/d/1bIlKYouxwizQXbud7SXd5F5oOyoHFH4x/view?usp=sharing). You can also choose other type of clip models and corresponding weights from openclip, if you do this, don't forget to modify your options.
+
+
+### 3. Initialize Conda Environment and Clone Repo
 
 ⚠️ To ensure consistency of the results, we recommend following our package version to install dependencies.
 
@@ -85,7 +90,7 @@ conda install pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=
 
 ```
 
-### 3. Install Modified BasicSR
+### 4. Install Modified BasicSR
 ```bash
 cd basicsr_modified
 pip install tb-nightly -i https://mirrors.aliyun.com/pypi/simple # Run this line if in Chinese Mainland
@@ -94,7 +99,7 @@ python setup.py develop
 cd ..
 ```
 
-### 4. Install Our CORUN-Colabator
+### 5. Install Our CORUN-Colabator
 ```bash
 pip install -r requirements.txt
 python setup.py develop
@@ -104,8 +109,6 @@ python init_modules.py
 ```bash
 export HF_ENDPOINT=https://hf-mirror.com
 ```
-
-Download the pre-trained da-clip weights and place it in `./pretrained_weights/`. You can download the daclip weights we used from [Google Drive](https://drive.google.com/file/d/1bIlKYouxwizQXbud7SXd5F5oOyoHFH4x/view?usp=sharing). You can also choose other type of clip models and corresponding weights from openclip, if you do this, don't forget to modify your options.
 
 
 ## 🏃 For Image Dehazing Task (CORUN as Example)
