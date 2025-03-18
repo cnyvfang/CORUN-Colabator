@@ -162,7 +162,7 @@ Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. Y
 CUDA_VISIBLE_DEVICES=0 sh dehazing_options/valid.corun.sh
 # OR
 CUDA_VISIBLE_DEVICES=0  python3  corun_colabator/simple_test.py \
-  --opt options/test_corun.yml \
+  --opt dehazing_options/test_corun.yml \
   --input_dir /path/to/testset/images  \
   --result_dir ./results/CORUN \
   --weights ./pretrained_weights/CORUN.pth \
