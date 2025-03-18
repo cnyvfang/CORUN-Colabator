@@ -154,8 +154,8 @@ sh image_restoration_options/train_stage2_restormer_with_colabator.sh
 sh image_restoration_options/train_stage2_restormer_with_colabator_single_gpu.sh
 ```
 
-## 🏃‍♂️ Testing Our CORUN+ Model
-Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN+ weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing)
+## 🏃‍♂️ Testing Our CORUN+
+Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN+ weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing).
 
 ### Inference
 ```bash
