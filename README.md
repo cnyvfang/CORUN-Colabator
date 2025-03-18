@@ -124,7 +124,7 @@ sh dehazing_options/train_corun_with_colabator_by_depth_single_gpu.sh
 ```
 
 
-## 🍺 Training for Any Image Restoration Tasks
+## 🏃 Training for Any Image Restoration Tasks
 If you want to use other network to replace Restormer, you only need to add your network to [archs](corun_colabator/archs), replace the network definition in option files and run the script. If you need to define your own loss function, you need to modify the corresponding [models](corun_colabator/models) and [losses](corun_colabator/losses) before you invoke it in option files.
 
 ⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
