@@ -50,7 +50,7 @@ class Mixing_Augment:
 
 
 @MODEL_REGISTRY.register()
-class Pretrain_with_Transmission(SRModel):
+class Pretrain_by_Depth(SRModel):
     """
     It is trained without GAN losses.
     It mainly performs:
@@ -59,7 +59,7 @@ class Pretrain_with_Transmission(SRModel):
     """
 
     def __init__(self, opt):
-        super(Pretrain_with_Transmission, self).__init__(opt)
+        super(Pretrain_by_Depth, self).__init__(opt)
         if self.is_train:
             self.mixing_flag = self.opt['train']['mixing_augs'].get('mixup', False)
             if self.mixing_flag:

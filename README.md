@@ -12,7 +12,7 @@ This is the official PyTorch codes for the paper.
 [//]: # (**Abstract:** Real-world Image Dehazing &#40;RID&#41; aims to alleviate haze-induced degradation in real-world settings. This task remains challenging due to the complexities in accurately modeling real haze distributions and the scarcity of paired real-world data. To address these challenges, we first introduce a cooperative unfolding network that jointly models atmospheric scattering and image scenes, effectively integrating physical knowledge into deep networks to restore haze-contaminated details. Additionally, we propose the first RID-oriented iterative mean-teacher framework, termed the Coherence-based Label Generator, to generate high-quality pseudo labels for network training. Specifically, we provide an optimal label pool to store the best pseudo-labels during network training, leveraging both global and local coherence to select high-quality candidates and assign weights to prioritize haze-free regions. We verify the effectiveness of our method, with experiments demonstrating that it achieves state-of-the-art performance on RID tasks.  )
 
 
-<details open>
+<details>
 <summary>🏃 The architecture of the proposed CORUN with the details at k-th stage (CORUN)</summary>
 <center>
     <img
@@ -20,7 +20,7 @@ This is the official PyTorch codes for the paper.
 </center>
 </details>
 
-<details open>
+<details>
 <summary>🏃🏻‍♂️ The plug-and-play Coherence-based Pseudo Labeling paradigm (Colabator)</summary>
 <center>
     <img
@@ -32,21 +32,27 @@ This is the official PyTorch codes for the paper.
 
 
 ## 🔥 News
-```
-⚠️ We found that the previous installation script installed an incorrect version 
-of PyTorch and Numpy, which led to erroneous experimental results. Users who used
-the repository code before 2024-10-23 should reconfigure the environment using the
-new script, and ensure that PyTorch version 2.1.2 is installed.
-```
 - **2025-01-17:** We upload a simple example to **pretrain**(restormer_sample.yml) and **fine-tune**(colabator_sample.yml) **Restormer** with our framework, you can find it in the option_templates folder. 🎉
 - **2024-11-06:** We fix some bugs in the code and support the single GPU training now. 🐞
 - **2024-10-26:** Our results and pre-trained weights have been released! ❤️
 - **2024-10-23:** We are processing the camera-ready version of this paper, the pretrained weights and test results will be released soon.
 - **2024-09-26:** This paper has been accepted by **NeurIPS 2024 as a Spotlight Paper**. 🎉 Thanks all the participants, reviewers, chairs and committee. We will release the code soon.
-- **2024-07-26:** We have organized and refined the code for the Colabator framework into a separate repository to facilitate more efficient application across different networks and tasks. The repository of Colabator Template will be made public together with the code of this repository once the paper is accepted. 😚
-- **2024-06-13:** We release the preprint and the citation.
-- **2024-06-12:** We release the results and acknowledgements of this work.
-- **2024-05-28:** We release this repository, the preprint of full paper will be release soon.
+
+[//]: # (- **2024-07-26:** We have organized and refined the code for the Colabator framework into a separate repository to facilitate more efficient application across different networks and tasks. The repository of Colabator Template will be made public together with the code of this repository once the paper is accepted. 😚)
+
+[//]: # (- **2024-06-13:** We release the preprint and the citation.)
+
+[//]: # (- **2024-06-12:** We release the results and acknowledgements of this work.)
+
+[//]: # (- **2024-05-28:** We release this repository, the preprint of full paper will be release soon.)
+
+## 🎺 Something You Should Know
+
+We provide two types of dataset loading functions for model training: **1. loads clean images and corresponding depth maps to generate hazy images** using the RIDCP Online Haze Generation Pipeline, **2. directly loads paired clean and degraded images**. You can choose the appropriate method based on your dataset and task.
+
+**1. Training for dehazing task by online haze generation**, we support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). Please refer to [HERE](https://https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#training-for-image-dehazing-task). You can alse use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
+
+**2. Training for any image restoration tasks (also including image dehazing task) by offline paired degraded-clean images**, please refer to [HERE](https://https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#training-for-any-image-restoration-tasks).
 
 
 ## ⚙️ Dependencies and Installation
@@ -58,12 +64,10 @@ new script, and ensure that PyTorch version 2.1.2 is installed.
 - **Duplicate Removed URHI** can be downloaded from [Google Drive](https://drive.google.com/file/d/1B29LsNhBWoRHDk2R_cc5nNqcn7c87sg-/view?usp=sharing)
 - **RIDCP500** can be downloaded from [RIDCP's Repo](https://github.com/RQ-Wu/RIDCP_dehazing)
 
-We provide two types of dataset loading functions for model training: one **loads clean images and corresponding depth maps to generate hazy images** using the RIDCP Data Generation Pipeline, and the other **directly loads paired clean and degraded images**. You can choose the appropriate method based on your dataset and task.
-
-**For the haze generation method**, we support reading the RIDCP500 dataset (where depth maps are stored as .npy files) as well as the OTS/ITS datasets (where depth maps are stored as .mat files). If your dataset contains paired clean images and depth maps, you can also use your own dataset. If your dataset does not include depth maps, you can generate corresponding depth maps using methods such as RA-Depth.
-**For the paired degraded-clean method**, you can use any paired degraded-clean image pairs for training and testing.
-
 ### Initialize Conda Environment and Clone Repo
+
+⚠️ To ensure consistency of the results, we recommend following our package version to install dependencies.
+
 ```bash
 git clone https://github.com/cnyvfang/CORUN-Colabator.git
 conda create -n corun_colabator python=3.9
@@ -96,45 +100,58 @@ export HF_ENDPOINT=https://hf-mirror.com
 Download the pre-trained da-clip weights and place it in `./pretrained_weights/`. You can download the daclip weights we used from [Google Drive](https://drive.google.com/file/d/1bIlKYouxwizQXbud7SXd5F5oOyoHFH4x/view?usp=sharing). You can also choose other type of clip models and corresponding weights from openclip, if you do this, don't forget to modify your options.
 
 
-## 🏃 Train
-⚠️ **Please replace the dataset path in the options file with your own dataset path.**
+## 🏃 Training for Image Dehazing Task
+If you want to use other network to replace our CORUN, you only need to add your network to [archs](corun_colabator/archs), replace the network definition in option files and run the script. If you need to define your own loss function, you need to modify the corresponding [models](corun_colabator/models) and [losses](corun_colabator/losses) before you invoke it in option files.
 
-⚠️ **If using a single GPU for training, we provide a script. If memory is insufficient, reduce the image or batch size in the option files. Note that our paper’s results are based on 4-GPU training, so single-GPU results may differ, but should still be good.**
+⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
-### Pretrain CORUN
+### (CORUN Example) Pretrain
+This step can be skipped if you DO NOT USE OUR CORUN, and have already well-trained your model in your framework.
+
 ```bash
 # Multi-GPU
-sh options/train_corun_with_depth.sh
-# Single-GPU
-sh options/train_corun_with_depth_single_gpu.sh
+sh dehazing_options/train_corun_by_depth.sh
+# Single-GPU (Not recommended)
+sh dehazing_options/train_corun_by_depth_single_gpu.sh
 
 ```
-### Fine-tune CORUN with Colabator
+### (CORUN+ Example) Fine-tune with Colabator
 ```bash
 # Multi-GPU
-sh options/train_colabator_with_depth.sh
-# Single-GPU
-sh options/train_colabator_with_depth_single_gpu.sh
+sh dehazing_options/train_corun_with_colabator_by_depth.sh
+# Single-GPU (Not recommended)
+sh dehazing_options/train_corun_with_colabator_by_depth_single_gpu.sh
 ```
 
 
-### Colabator with your own models
-To fine-tune your own model using Colabator, you only need to add your network to [archs](corun_colabator/archs), define your own configuration file and run the script. 
+## 🍺 Training for Any Image Restoration Tasks
+If you want to use other network to replace Restormer, you only need to add your network to [archs](corun_colabator/archs), replace the network definition in option files and run the script. If you need to define your own loss function, you need to modify the corresponding [models](corun_colabator/models) and [losses](corun_colabator/losses) before you invoke it in option files.
 
-We provide configuration file templates based on Restormer in the [option_templates](option_templates) folder, which you can refer to and modify.
+⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
-You can modify the files named with Stage 1 to pretrain your model. If you have already completed pretraining, modify the files named with Stage 2 to use our Colabator for fine-tuning.
+### (Restormer Example) Pretrain
+This step can be skipped if you have already well-trained your model in your framework.
+```bash
+# Multi-GPU
+sh image_restoration_options/train_stage1_restormer.sh
+# Single-GPU
+sh image_restoration_options/train_stage1_restormer_single_gpu.sh
 
-If you are working on image dehazing and your datasets have corresponding depth maps, you can use the files in the [dehaze](option_templates/dehaze) subfolder instead of the Stage 2 files in [option_templates](option_templates).
-
-If you need to define your own loss function, you need to modify the corresponding [models](corun_colabator/models) and [losses](corun_colabator/losses) before you invoke it in option files.
+```
+### (Restormer+ Example) Fine-tune with Colabator
+```bash
+# Multi-GPU
+sh image_restoration_options/train_stage2_restormer_with_colabator.sh
+# Single-GPU
+sh image_restoration_options/train_stage2_restormer_with_colabator_single_gpu.sh
+```
 
 ## 🏃‍♂️ Test
 Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN+ weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing)
 
 ### Inference
 ```bash
-CUDA_VISIBLE_DEVICES=0 sh options/valid.corun.sh
+CUDA_VISIBLE_DEVICES=0 sh dehazing_options/valid.corun.sh
 # OR
 CUDA_VISIBLE_DEVICES=0  python3  corun_colabator/simple_test.py \
   --opt options/test_corun.yml \

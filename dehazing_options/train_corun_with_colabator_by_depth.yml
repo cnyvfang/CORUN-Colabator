@@ -1,5 +1,5 @@
 name: trainS2_CORUN_RIDCP500
-model_type: Colabator_with_Transmission
+model_type: Colabator_by_Depth
 scale: 1
 num_gpu: auto  # auto: can infer from your visible devices automatically. official: 8 GPUs
 manual_seed: 0
