@@ -60,7 +60,7 @@ To train or finetune our CORUN or any other Image Dehazing methods by online haz
 ```diff
 + 2. For any image restoration tasks by offline paired degraded-clean images.
 ```
-To train or finetune any Image-to-Image Image Restoration tasks (also including image dehazing task). **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
+To train or finetune any Image-to-Image based Image Restoration tasks (also including image dehazing task). **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
 
 
 ## ⚙️ Dependencies and Installation
