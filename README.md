@@ -65,14 +65,14 @@ To train or fine-tune any Image-to-Image based Image Restoration tasks (also inc
 
 ## ⚙️ Dependencies and Installation
 
-### Datasets
+### 1. Download Datasets (Optional)
 
 - **RTTS** dataset can be downloaded from [Dropbox](https://utexas.app.box.com/s/2yekra41udg9rgyzi3ysi513cps621qz).
 - **URHI** dataset can be downloaded from [Dropbox](https://utexas.app.box.com/s/7hu094vwkw0cwowv5wijwv9pure2fvup).
 - **Duplicate Removed URHI** can be downloaded from [Google Drive](https://drive.google.com/file/d/1B29LsNhBWoRHDk2R_cc5nNqcn7c87sg-/view?usp=sharing)
 - **RIDCP500** can be downloaded from [RIDCP's Repo](https://github.com/RQ-Wu/RIDCP_dehazing)
 
-### Initialize Conda Environment and Clone Repo
+### 2. Initialize Conda Environment and Clone Repo
 
 ⚠️ To ensure consistency of the results, we recommend following our package version to install dependencies.
 
@@ -85,7 +85,7 @@ conda install pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=
 
 ```
 
-### Install Modified BasicSR
+### 3. Install Modified BasicSR
 ```bash
 cd basicsr_modified
 pip install tb-nightly -i https://mirrors.aliyun.com/pypi/simple # Run this line if in Chinese Mainland
@@ -94,7 +94,7 @@ python setup.py develop
 cd ..
 ```
 
-### Install Our CORUN-Colabator
+### 4. Install Our CORUN-Colabator
 ```bash
 pip install -r requirements.txt
 python setup.py develop
@@ -113,7 +113,7 @@ If you want to use other network to replace our CORUN, you only need to add your
 
 ⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
-### Pretraining
+### 1. Pretraining
 This step can be skipped if you DO NOT USE OUR CORUN, and have already well-trained your model in your framework.
 
 ```bash
@@ -123,7 +123,7 @@ sh dehazing_options/train_corun_by_depth.sh
 sh dehazing_options/train_corun_by_depth_single_gpu.sh
 
 ```
-### Fine-tuning with Colabator
+### 2. Fine-tuning with Colabator
 ```bash
 # Multi-GPU
 sh dehazing_options/train_corun_with_colabator_by_depth.sh
@@ -137,7 +137,7 @@ If you want to use other network to replace Restormer, you only need to add your
 
 ⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
-### Pretraining
+### 1. Pretraining
 This step can be skipped if you have already well-trained your model in your framework.
 ```bash
 # Multi-GPU
@@ -146,7 +146,7 @@ sh image_restoration_options/train_stage1_restormer.sh
 sh image_restoration_options/train_stage1_restormer_single_gpu.sh
 
 ```
-### Fine-tuning with Colabator
+### 2. Fine-tuning with Colabator
 ```bash
 # Multi-GPU
 sh image_restoration_options/train_stage2_restormer_with_colabator.sh
@@ -158,7 +158,7 @@ sh image_restoration_options/train_stage2_restormer_with_colabator_single_gpu.sh
 Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN+ weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing). **To quickly use the results of our experiments without manual inference or retraining, you can download all results dehazed/restored by our model from [Google Drive](https://drive.google.com/file/d/1yhaNHc8eV-88Bn7YKa7PehZsUddRBjA1/view?usp=sharing).** 
 
 
-### Inference
+### 1. Inference
 ```bash
 CUDA_VISIBLE_DEVICES=0 sh dehazing_options/valid.corun.sh
 # OR
@@ -170,7 +170,7 @@ CUDA_VISIBLE_DEVICES=0  python3  corun_colabator/simple_test.py \
   --dataset RTTS
 ```
 
-### Evalutation
+### 2. Evalutation
 Caculate the NIMA and BRISQUE results.
 ```bash
 CUDA_VISIBLE_DEVICES=0 python evaluate.py --input_dir /path/to/results
@@ -197,7 +197,7 @@ We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and c
   </p>  
   </details>
 
-<details open> 
+<details> 
 <summary>Visual Comparison (click to expand)</summary>
 
 - Visual comparison on RTTS
