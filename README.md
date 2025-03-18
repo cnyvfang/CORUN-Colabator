@@ -58,7 +58,7 @@ We support loading the depth map from .npy (used by RICDP500) of .mat files (use
 **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task)
 
 ```diff
-- 2. Training/Fine-tuning for any image restoration tasks by offline paired degraded-clean images.
++ 2. Training/Fine-tuning for any image restoration tasks by offline paired degraded-clean images.
 ```
 For any Image-to-Image Image Restoration tasks (also including image dehazing task).
 **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
