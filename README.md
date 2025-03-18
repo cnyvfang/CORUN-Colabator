@@ -46,13 +46,13 @@ This is the official PyTorch codes for the paper.
 
 [//]: # (- **2024-05-28:** We release this repository, the preprint of full paper will be release soon.)
 
-## 🎺 Something You Should Know
+## 🎺 Something You Should Know Before Taste
 
 We provide two types of dataset loading functions for model training: **1. loads clean images and corresponding depth maps to generate hazy images** using the RIDCP Online Haze Generation Pipeline, **2. directly loads paired clean and degraded images**. You can choose the appropriate method based on your dataset and task.
 
-**1. Training for dehazing task by online haze generation**, we support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). Please refer to [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task). You can alse use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
+<font color=Purple>1. Training/Fine-tuning for image dehazing task by online haze generation</font>, we support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). Please refer to [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task). You can alse use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
 
-**2. Training for any image restoration tasks (also including image dehazing task) by offline paired degraded-clean images**, please refer to [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
+<font color=Purple>2. Training/Fine-tuning for any image restoration tasks (also including image dehazing task) by offline paired degraded-clean images</font>, please refer to [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
 
 
 ## ⚙️ Dependencies and Installation
