@@ -127,6 +127,8 @@ sh dehazing_options/train_corun_by_depth_single_gpu.sh
 
 ```
 ### 2. Fine-tuning with Colabator on Real-world Data
+Please do not forget to set and load the pre-trained weights of the first stage in option file.
+
 ```bash
 # Multi-GPU
 sh dehazing_options/train_corun_with_colabator_by_depth.sh
@@ -150,6 +152,7 @@ sh image_restoration_options/train_stage1_restormer_single_gpu.sh
 
 ```
 ### 2. Fine-tuning with Colabator on Real-world Data
+Please do not forget to set and load the pre-trained weights of the first stage in option file.
 ```bash
 # Multi-GPU
 sh image_restoration_options/train_stage2_restormer_with_colabator.sh
