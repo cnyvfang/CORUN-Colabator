@@ -50,9 +50,9 @@ This is the official PyTorch codes for the paper.
 
 We provide two types of dataset loading functions for model training: **1. loads clean images and corresponding depth maps to generate hazy images** using the RIDCP Online Haze Generation Pipeline, **2. directly loads paired clean and degraded images**. You can choose the appropriate method based on your dataset and task.
 
-**1. Training for dehazing task by online haze generation**, we support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). Please refer to [HERE](https://https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#training-for-image-dehazing-task). You can alse use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
+**1. Training for dehazing task by online haze generation**, we support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). Please refer to [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task). You can alse use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
 
-**2. Training for any image restoration tasks (also including image dehazing task) by offline paired degraded-clean images**, please refer to [HERE](https://https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#training-for-any-image-restoration-tasks).
+**2. Training for any image restoration tasks (also including image dehazing task) by offline paired degraded-clean images**, please refer to [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
 
 
 ## ⚙️ Dependencies and Installation
@@ -146,7 +146,7 @@ sh image_restoration_options/train_stage2_restormer_with_colabator.sh
 sh image_restoration_options/train_stage2_restormer_with_colabator_single_gpu.sh
 ```
 
-## 🏃‍♂️ Test
+## 🏃‍♂️ Testing Our CORUN+ Model
 Download the pre-trained CORUN weight and place it in `./pretrained_weights/`. You can download the CORUN+ weight from [Google Drive](https://drive.google.com/file/d/18afbgAOLYYr8Ef4JsUtz8WNl9xzQ3cd9/view?usp=sharing)
 
 ### Inference
