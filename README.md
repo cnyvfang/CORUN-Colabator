@@ -114,7 +114,7 @@ If you want to use other network to replace our CORUN, you only need to add your
 ⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
 ### 1. Pretraining
-This step can be skipped if you DO NOT USE OUR CORUN, and have already well-trained your model in your framework.
+This step can be skipped IF YOU DO NOT USE OUR CORUN, and have already well-trained your model in your framework.
 
 ```bash
 # Multi-GPU
