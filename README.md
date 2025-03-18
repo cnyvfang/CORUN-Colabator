@@ -116,7 +116,7 @@ If you want to use other network to replace our CORUN, you only need to add your
 
 ⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
-### 1. Pretraining on Synthetic
+### 1. Pretraining on Synthetic Data
 This step can be skipped IF YOU DO NOT USE OUR CORUN, and have already well-trained your model in your framework.
 
 ```bash
@@ -126,7 +126,7 @@ sh dehazing_options/train_corun_by_depth.sh
 sh dehazing_options/train_corun_by_depth_single_gpu.sh
 
 ```
-### 2. Fine-tuning with Colabator on Real-world
+### 2. Fine-tuning with Colabator on Real-world Data
 ```bash
 # Multi-GPU
 sh dehazing_options/train_corun_with_colabator_by_depth.sh
@@ -140,7 +140,7 @@ If you want to use other network to replace Restormer, you only need to add your
 
 ⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
-### 1. Pretraining on Synthetic
+### 1. Pretraining on Synthetic Data
 This step can be skipped if you have already well-trained your model in your framework.
 ```bash
 # Multi-GPU
@@ -149,7 +149,7 @@ sh image_restoration_options/train_stage1_restormer.sh
 sh image_restoration_options/train_stage1_restormer_single_gpu.sh
 
 ```
-### 2. Fine-tuning with Colabator on Real-world
+### 2. Fine-tuning with Colabator on Real-world Data
 ```bash
 # Multi-GPU
 sh image_restoration_options/train_stage2_restormer_with_colabator.sh
