@@ -55,12 +55,12 @@ We provide two types of dataset loading functions for model training: **1. loads
 ```
 We support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). You can also use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
 
-To train or fine-tune our CORUN or any other Image Dehazing methods by online haze generation. **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task)
+To train or fine-tune our CORUN or any other Image Dehazing methods by online haze generation. **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-for-image-dehazing-task-corun-as-example)
 
 ```diff
 + 2. For any image restoration tasks by offline paired degraded-clean images.
 ```
-To train or fine-tune any Image-to-Image based Image Restoration tasks (also including image dehazing task). **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
+To train or fine-tune any Image-to-Image based Image Restoration tasks (also including image dehazing task). **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-for-any-image-restoration-tasks-restormer-as-example).
 
 
 ## ⚙️ Dependencies and Installation
