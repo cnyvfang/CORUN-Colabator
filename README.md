@@ -55,12 +55,12 @@ We provide two types of dataset loading functions for model training: **1. loads
 ```
 We support loading the depth map from .npy (used by RICDP500) of .mat files (used by OTS/ITS). You can also use depth estimation methods like Depth Anything or RA-Depth to construct the depth maps for your own dataset and save as .npy files.
 
-To train or finetune our CORUN or any other Image Dehazing methods by online haze generation. **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task)
+To train or fine-tune our CORUN or any other Image Dehazing methods by online haze generation. **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-image-dehazing-task)
 
 ```diff
 + 2. For any image restoration tasks by offline paired degraded-clean images.
 ```
-To train or finetune any Image-to-Image based Image Restoration tasks (also including image dehazing task). **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
+To train or fine-tune any Image-to-Image based Image Restoration tasks (also including image dehazing task). **Please refer to** [HERE](https://github.com/cnyvfang/CORUN-Colabator?tab=readme-ov-file#-training-for-any-image-restoration-tasks).
 
 
 ## ⚙️ Dependencies and Installation
@@ -108,12 +108,12 @@ export HF_ENDPOINT=https://hf-mirror.com
 Download the pre-trained da-clip weights and place it in `./pretrained_weights/`. You can download the daclip weights we used from [Google Drive](https://drive.google.com/file/d/1bIlKYouxwizQXbud7SXd5F5oOyoHFH4x/view?usp=sharing). You can also choose other type of clip models and corresponding weights from openclip, if you do this, don't forget to modify your options.
 
 
-## 🏃 Training for Image Dehazing Task
+## 🏃 For Image Dehazing Task (CORUN as Example)
 If you want to use other network to replace our CORUN, you only need to add your network to [archs](corun_colabator/archs), replace the network definition in option files and run the script. If you need to define your own loss function, you need to modify the corresponding [models](corun_colabator/models) and [losses](corun_colabator/losses) before you invoke it in option files.
 
 ⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
-### (CORUN Example) Pretrain
+### Pretraining
 This step can be skipped if you DO NOT USE OUR CORUN, and have already well-trained your model in your framework.
 
 ```bash
@@ -123,7 +123,7 @@ sh dehazing_options/train_corun_by_depth.sh
 sh dehazing_options/train_corun_by_depth_single_gpu.sh
 
 ```
-### (CORUN+ Example) Fine-tune with Colabator
+### Fine-tuning with Colabator
 ```bash
 # Multi-GPU
 sh dehazing_options/train_corun_with_colabator_by_depth.sh
@@ -132,12 +132,12 @@ sh dehazing_options/train_corun_with_colabator_by_depth_single_gpu.sh
 ```
 
 
-## 🏃 Training for Any Image Restoration Tasks
+## 🏃 For Any Image Restoration Tasks (Restormer as Example)
 If you want to use other network to replace Restormer, you only need to add your network to [archs](corun_colabator/archs), replace the network definition in option files and run the script. If you need to define your own loss function, you need to modify the corresponding [models](corun_colabator/models) and [losses](corun_colabator/losses) before you invoke it in option files.
 
 ⚠️ **Please replace the dataset path in the corresponding option files with your own dataset path.**
 
-### (Restormer Example) Pretrain
+### Pretraining
 This step can be skipped if you have already well-trained your model in your framework.
 ```bash
 # Multi-GPU
@@ -146,7 +146,7 @@ sh image_restoration_options/train_stage1_restormer.sh
 sh image_restoration_options/train_stage1_restormer_single_gpu.sh
 
 ```
-### (Restormer+ Example) Fine-tune with Colabator
+### Fine-tuning with Colabator
 ```bash
 # Multi-GPU
 sh image_restoration_options/train_stage2_restormer_with_colabator.sh
