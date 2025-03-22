@@ -193,7 +193,8 @@ CUDA_VISIBLE_DEVICES=0 python evaluate.py --input_dir /path/to/results
 
 ## 🔍 Results
 
-We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and corresponding downstream tasks. More results can be found in the paper.
+We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and corresponding downstream tasks. More results can be found in the paper. **To quickly use the results of our experiments without manual inference or retraining, you can download all results dehazed/restored by our model from [Google Drive](https://drive.google.com/file/d/1yhaNHc8eV-88Bn7YKa7PehZsUddRBjA1/view?usp=sharing).** 
+
 
 <details>
 <summary>Quantitative Comparison (click to expand)</summary>
