@@ -35,7 +35,7 @@ datasets:
     use_flip: true
     use_rot: false
 
-    num_worker_per_gpu: 20
+    num_worker_per_gpu: 8
     batch_size_per_gpu: 2
     mini_batch_sizes: [ 2 ]             # Batch size per gpu
     iters: [ 30000 ]
@@ -44,7 +44,7 @@ datasets:
 
     # data loader
     use_shuffle: true
-    dataset_enlarge_ratio: 10
+    dataset_enlarge_ratio: 5
     prefetch_mode: ~
 
   val:
