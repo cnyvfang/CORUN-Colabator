@@ -23,7 +23,7 @@ datasets:
     dataroot_gt: /data/fcy/Datasets/Dehaze/RIDCP/rgb_500
     dataroot_depth: /data/fcy/Datasets/Dehaze/RIDCP/depth_500
     beta_range: [ 0.2, 2.8 ]
-    A_range: [ 0.5, 1.8 ]
+    A_range: [ 0.25, 1.0 ]
     color_p: 1.0
     color_range: [ -0.025, 0.025 ]
 
