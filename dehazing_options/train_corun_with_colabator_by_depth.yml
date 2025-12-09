@@ -33,7 +33,7 @@ datasets:
     dataroot_depth: /data/fcy/Datasets/Dehaze/RIDCP/depth_500
     dataroot_real: /data/fcy/Datasets/Dehaze/UnannotatedHazyImages-cleaned
     beta_range: [ 0.2, 2.8 ]
-    A_range: [ 0.25, 1.8 ]
+    A_range: [ 0.25, 1.0 ]
     color_p: 1.0
     color_range: [ -0.025, 0.025 ]
     use_resize_crop: true
