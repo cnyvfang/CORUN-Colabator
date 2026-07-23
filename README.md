@@ -237,13 +237,12 @@ We achieved state-of-the-art performance on *RTTS* and *Fattal's* datasets and c
 If you find the code helpful in your research or work, please cite the following paper(s).
 
 ```
-@article{fang2024real,
-  title={Real-world image dehazing with coherence-based pseudo labeling and cooperative unfolding network},
-  author={Fang, Chengyu and He, Chunming and Xiao, Fengyang and Zhang, Yulun and Tang, Longxiang and Zhang, Yuelin and Li, Kai and Li, Xiu},
-  journal={Advances in Neural Information Processing Systems},
-  volume={37},
-  pages={97859--97883},
-  year={2024}
+@inproceedings{fang2024realworld,
+  title={Real-world Image Dehazing with Coherence-based Pseudo Labeling and Cooperative Unfolding Network},
+  author={Chengyu Fang and Chunming He and Fengyang Xiao and Yulun Zhang and Longxiang Tang and Yuelin Zhang and Kai Li and Xiu Li},
+  booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+  year={2024},
+  url={https://openreview.net/forum?id=I6tBNcJE2F}
 }
 ```
 
